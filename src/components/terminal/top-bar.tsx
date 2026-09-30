@@ -1,4 +1,4 @@
-import { tabs } from "@/content/site";
+import { TopBarTabs } from "./top-bar-tabs";
 
 export function TopBar() {
   return (
@@ -17,24 +17,7 @@ export function TopBar() {
           </div>
         </div>
 
-        <nav
-          aria-label="Buffers"
-          className="hidden md:flex items-center gap-space-sm text-label-md"
-        >
-          {tabs.map((tab, i) => (
-            <span
-              key={tab}
-              aria-current={i === 0 ? "page" : undefined}
-              className={
-                i === 0
-                  ? "px-space-sm py-space-xs bg-surface-container-high text-primary font-bold"
-                  : "px-space-sm py-space-xs text-on-surface-variant"
-              }
-            >
-              {tab}
-            </span>
-          ))}
-        </nav>
+        <TopBarTabs />
 
         <div
           aria-hidden="true"

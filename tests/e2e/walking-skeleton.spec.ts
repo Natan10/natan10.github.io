@@ -7,7 +7,9 @@ test.describe("walking skeleton", () => {
     await expect(page.getByText("guest@terminal:")).toBeVisible();
     await expect(page.getByText("[1: console.sh]")).toBeVisible();
     await expect(page.getByText("Macro Registers:")).toBeVisible();
-    await expect(page.getByRole("button")).toHaveCount(7);
+    await expect(
+      page.getByRole("button", { name: /^\[\/(user|experience|skills|projects|theme|help|clear)\]/ }),
+    ).toHaveCount(7);
     await expect(
       page.getByRole("region", { name: "Session boot log" }),
     ).toBeVisible();

@@ -1,5 +1,6 @@
 import { asciiBanner } from "@/lib/ascii";
-import { chips, site } from "@/content/site";
+import { site } from "@/content/site";
+import { MacroChips } from "./macro-chips";
 
 export function Hero() {
   return (
@@ -47,26 +48,7 @@ export function Hero() {
           <span className="text-label-sm text-outline mr-space-xs uppercase">
             Macro Registers:
           </span>
-          {chips.map((chip) => (
-            <button
-              key={chip.command}
-              type="button"
-              className={
-                "danger" in chip
-                  ? "group px-space-sm py-space-xs bg-surface-container-high hover:bg-error-container text-label-md flex items-center gap-1 border border-outline-variant"
-                  : "group px-space-sm py-space-xs bg-surface-container hover:bg-surface-container-high text-label-md flex items-center gap-1 border border-outline-variant"
-              }
-            >
-              <span
-                className={"danger" in chip ? "text-error" : "text-secondary"}
-              >
-                [{chip.command}]
-              </span>
-              <span className="text-on-surface-variant group-hover:text-on-surface">
-                {chip.label}
-              </span>
-            </button>
-          ))}
+          <MacroChips />
         </div>
       </div>
     </header>

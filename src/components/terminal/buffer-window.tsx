@@ -1,4 +1,6 @@
 import { Identity } from "./identity";
+import { OutputStream } from "./output-stream";
+import { Prompt } from "./prompt";
 import {
   Contact,
   Experience,
@@ -29,6 +31,8 @@ export function BufferWindow() {
         </div>
       </div>
 
+      <Prompt />
+
       <div
         id="terminal-screen"
         className="p-space-md sm:p-space-lg flex flex-col gap-space-lg min-h-[320px] text-body-md"
@@ -58,6 +62,7 @@ export function BufferWindow() {
             />
           </p>
         </section>
+        <OutputStream />
         <Identity />
         <Experience />
         <Skills />

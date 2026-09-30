@@ -137,3 +137,9 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Briefly outlines the section a command just navigated to. */
+section[data-highlight="true"] {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
