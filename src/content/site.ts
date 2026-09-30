@@ -1,8 +1,9 @@
-// TODO(owner): confirm real name, title and copy. The full typed content layer arrives in ticket 02.
+import { content } from "./index";
+
 export const site = {
-  name: "Natan Moreira",
+  name: content.profile.name,
   bannerWord: "NATAN",
-  title: "Software Developer",
+  title: content.profile.title,
   description:
     "Personal portfolio of Natan Moreira, software developer: experience, skills, projects and key takeaways.",
   version: "v0.1.0",

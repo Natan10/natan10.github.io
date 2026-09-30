@@ -1,3 +1,5 @@
+import { Identity } from "./identity";
+
 export function BufferWindow() {
   return (
     <div className="w-full bg-surface-container-low border border-outline-variant flex flex-col">
@@ -49,6 +51,7 @@ export function BufferWindow() {
             />
           </p>
         </section>
+        <Identity />
       </div>
     </div>
   );
