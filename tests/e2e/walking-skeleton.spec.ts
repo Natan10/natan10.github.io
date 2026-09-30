@@ -29,8 +29,13 @@ test.describe("walking skeleton", () => {
     await expect(art).toHaveAttribute("aria-hidden", "true");
     await expect(art).toContainText("█");
     // Nothing from the banner leaks into the accessibility tree.
+    // (Skill bars elsewhere on the page legitimately use the same glyph.)
+    const bannerLine = (await art.innerText())
+      .split("\n")
+      .find((l) => l.includes("█"))!
+      .trim();
     const snapshot = await page.locator("body").ariaSnapshot();
-    expect(snapshot).not.toContain("█");
+    expect(snapshot).not.toContain(bannerLine);
   });
 
   test("uses only JetBrains Mono and square corners", async ({ page }) => {

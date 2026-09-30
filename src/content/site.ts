@@ -5,6 +5,6 @@ export const site = {
   bannerWord: "NATAN",
   title: content.profile.title,
   description:
-    "Personal portfolio of Natan Moreira, software developer: experience, skills, projects and key takeaways.",
+    "Personal portfolio of Natan Moreira, software engineer: experience, skills, projects and key takeaways.",
   version: "v0.1.0",
 } as const;

@@ -20,7 +20,8 @@ test.beforeEach(async ({ page }) => {
 
 test.describe("keyboard", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
+    // Shortcuts are attached on hydration; wait for it before pressing keys.
+    await page.goto("/", { waitUntil: "networkidle" });
   });
 
   for (const key of ["/", ":"]) {
@@ -84,7 +85,7 @@ test.describe("keyboard", () => {
 
 test.describe("statusline", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
   });
 
   test("mode badge follows prompt focus", async ({ page }) => {

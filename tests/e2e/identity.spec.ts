@@ -14,7 +14,7 @@ test.describe("identity section", () => {
     await expect(
       identity.getByRole("heading", { level: 2, name: "Natan Moreira" }),
     ).toBeVisible();
-    await expect(identity).toContainText("Software Developer");
+    await expect(identity).toContainText("Software Engineer");
     await expect(identity.getByText("location", { exact: true })).toBeVisible();
     await expect(identity.getByText("status", { exact: true })).toBeVisible();
     await expect(identity.getByRole("list", { name: "Tags" })).toBeVisible();
@@ -37,10 +37,10 @@ test.describe("identity section", () => {
     expect(Number(lines)).toBe(6);
     const text = [
       "name: Natan Moreira",
-      "title: Software Developer",
-      /* remaining lines contain TODO copy; assert on a lower bound */
+      "title: Software Engineer",
+      /* remaining lines are longer copy; assert on a lower bound */
     ].join("\n");
     expect(Number(bytes)).toBeGreaterThan(text.length);
-    await expect(identity).toContainText("[TODO]");
+    await expect(identity).toContainText("[OK]");
   });
 });
