@@ -3,8 +3,8 @@ import { TopBarTabs } from "./top-bar-tabs";
 export function TopBar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest border-b border-outline-variant">
-      <div className="h-16 w-full px-margin-mobile md:px-margin flex items-center justify-between">
-        <div className="flex items-center gap-space-md min-w-0">
+      <div className="w-full px-margin-mobile md:px-margin md:h-16 flex flex-wrap md:flex-nowrap items-center justify-between">
+        <div className="h-12 md:h-auto flex items-center gap-space-md min-w-0">
           <div aria-hidden="true" className="flex items-center gap-space-xs">
             <span className="w-3 h-3 bg-error inline-block" />
             <span className="w-3 h-3 bg-primary-container inline-block" />
@@ -21,7 +21,7 @@ export function TopBar() {
 
         <div
           aria-hidden="true"
-          className="flex items-center gap-space-md text-label-sm"
+          className="h-12 md:h-auto flex items-center gap-space-md text-label-sm"
         >
           <div className="hidden sm:flex items-center gap-space-sm text-on-surface-variant">
             <span className="text-secondary">LATENCY: 14ms</span>

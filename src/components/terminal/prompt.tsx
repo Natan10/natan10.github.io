@@ -90,18 +90,18 @@ export function Prompt() {
         autoCapitalize="off"
         spellCheck={false}
         placeholder="/help"
-        className="min-w-0 flex-1 bg-transparent text-body-md text-on-surface placeholder:text-outline focus-visible:outline-2 focus-visible:outline-primary"
+        className="min-w-0 flex-1 min-h-11 md:min-h-0 bg-transparent text-body-md text-on-surface placeholder:text-outline focus-visible:outline-2 focus-visible:outline-primary"
       />
       <button
         type="submit"
-        className="px-space-sm py-space-xs bg-primary text-on-primary text-label-md font-bold"
+        className="min-h-11 md:min-h-0 px-space-md md:px-space-sm py-space-xs bg-primary text-on-primary text-label-md font-bold"
       >
         EXEC
       </button>
       <button
         type="button"
         onClick={() => run("/clear")}
-        className="px-space-sm py-space-xs bg-surface-container-high text-error text-label-md border border-outline-variant"
+        className="min-h-11 md:min-h-0 px-space-md md:px-space-sm py-space-xs bg-surface-container-high text-error text-label-md border border-outline-variant"
       >
         CLEAR
       </button>

@@ -82,9 +82,10 @@ export function Statusline() {
         >
           {command ? "COMMAND" : "NORMAL"}
         </span>
-        <span className="text-secondary truncate">⎇ main</span>
-        <span className="hidden sm:inline text-on-surface-variant">UTF-8</span>
-        <span className="hidden sm:inline text-primary-container">
+        <span className="md:hidden text-secondary truncate">profile.vim</span>
+        <span className="hidden md:inline text-secondary truncate">⎇ main</span>
+        <span className="hidden md:inline text-on-surface-variant">UTF-8</span>
+        <span className="hidden md:inline text-primary-container">
           ✓ 0 errors 0 warnings
         </span>
       </div>

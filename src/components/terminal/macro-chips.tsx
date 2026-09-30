@@ -12,8 +12,8 @@ export function MacroChips() {
       onClick={() => run(c.aliases?.find((a) => a.startsWith("/")) ?? c.name)}
       className={
         c.chip?.danger
-          ? "group px-space-sm py-space-xs bg-surface-container-high hover:bg-error-container text-label-md flex items-center gap-1 border border-outline-variant"
-          : "group px-space-sm py-space-xs bg-surface-container hover:bg-surface-container-high text-label-md flex items-center gap-1 border border-outline-variant"
+          ? "group min-h-11 md:min-h-0 px-space-sm py-space-xs bg-surface-container-high hover:bg-error-container text-label-md flex items-center gap-1 border border-outline-variant"
+          : "group min-h-11 md:min-h-0 px-space-sm py-space-xs bg-surface-container hover:bg-surface-container-high text-label-md flex items-center gap-1 border border-outline-variant"
       }
     >
       <span className={c.chip?.danger ? "text-error" : "text-secondary"}>
