@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { site } from "@/content/site";
+import { themeInitScript } from "@/lib/themes";
 import "./globals.css";
 
 // Self-hosted full JetBrains Mono (OFL). The Google Fonts subsets omit the
@@ -19,7 +20,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${jetbrainsMono.variable} h-full`}>
+    <html
+      lang="en"
+      className={`${jetbrainsMono.variable} h-full`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

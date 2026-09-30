@@ -1,5 +1,6 @@
 import { BufferWindow } from "@/components/terminal/buffer-window";
 import { Hero } from "@/components/terminal/hero";
+import { Statusline } from "@/components/terminal/statusline";
 import { TerminalProvider } from "@/components/terminal/terminal-provider";
 import { TopBar } from "@/components/terminal/top-bar";
 
@@ -13,6 +14,7 @@ export default function Home() {
           <BufferWindow />
         </div>
       </main>
+      <Statusline />
     </TerminalProvider>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { isEditable } from "@/lib/keyboard";
 import { commonPrefix, suggest } from "@/lib/commands";
 import { useTerminal } from "./terminal-provider";
 
@@ -11,6 +12,21 @@ export function Prompt() {
   const [cursor, setCursor] = useState<number | null>(null);
   const input = useRef<HTMLInputElement>(null);
 
+  // Vim-style entry: "/" or ":" anywhere on the page focuses the prompt with
+  // that character prefilled. Ignored while typing in any editable element.
+  useEffect(() => {
+    function onKey(e: globalThis.KeyboardEvent) {
+      if (e.key !== "/" && e.key !== ":") return;
+      if (e.ctrlKey || e.metaKey || e.altKey || isEditable(e.target)) return;
+      e.preventDefault();
+      setValue(e.key);
+      setCursor(null);
+      input.current?.focus();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   function submit() {
     if (!value.trim()) return;
     run(value);
@@ -20,7 +36,10 @@ export function Prompt() {
   }
 
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      input.current?.blur();
+    } else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
       if (!history.length) return;
       e.preventDefault();
       const from = cursor ?? history.length;

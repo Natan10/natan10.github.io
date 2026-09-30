@@ -6,10 +6,18 @@ import {
   useContext,
   useRef,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import { content } from "@/content";
 import { commands, find, parse } from "@/lib/commands";
+import {
+  getServerTheme,
+  getTheme,
+  setTheme,
+  subscribeTheme,
+} from "@/lib/theme-store";
+import { isTheme, THEME_NAMES } from "@/lib/themes";
 
 export type LogLine = {
   id: number;
@@ -56,6 +64,7 @@ export function TerminalProvider({ children }: { children: ReactNode }) {
   const [log, setLog] = useState<LogLine[]>([]);
   const [history, setHistory] = useState<string[]>([]);
   const nextId = useRef(0);
+  const theme = useSyncExternalStore(subscribeTheme, getTheme, getServerTheme);
 
   const append = useCallback((entries: Omit<LogLine, "id">[]) => {
     setLog((prev) => [
@@ -115,17 +124,27 @@ export function TerminalProvider({ children }: { children: ReactNode }) {
             },
           ]);
           return;
-        case ":theme":
-          append([
-            echo,
-            {
-              kind: "out",
-              text: args.length
-                ? `E474: Unknown theme: ${args[0]} (theme switching is not available yet)`
-                : "themes: warm (active) — more themes arrive soon",
-            },
-          ]);
+        case ":theme": {
+          const wanted = args[0];
+          const valid = THEME_NAMES.join(" | ");
+          if (!wanted) {
+            append([
+              echo,
+              { kind: "out", text: `themes: ${valid}` },
+              { kind: "out", text: `active: ${theme}` },
+            ]);
+          } else if (isTheme(wanted)) {
+            setTheme(wanted);
+            append([echo, { kind: "out", text: `Theme set to ${wanted}` }]);
+          } else {
+            append([
+              echo,
+              { kind: "err", text: `E474: Unknown theme: ${wanted}` },
+              { kind: "out", text: `Valid themes: ${valid}` },
+            ]);
+          }
           return;
+        }
       }
 
       if (command.target) {
@@ -133,7 +152,7 @@ export function TerminalProvider({ children }: { children: ReactNode }) {
         append([echo, { kind: "out", text: command.result ?? `Opened ${command.name}` }]);
       }
     },
-    [append],
+    [append, theme],
   );
 
   return (
