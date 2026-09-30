@@ -125,25 +125,27 @@ The target audience comprises software engineers, systems hackers, engineering l
 
 ## Colors
 
-The baseline palette defaults to Gruvbox Dark Hard, calibrated for high-contrast legibility against deep terminal backgrounds. The token architecture is built to pivot instantly across iconic themes (Gruvbox, Dracula, Nord, Monokai, Solarized Dark) via CSS root variables without structural re-layouts.
+The shipped default is the **warm** palette: a dark brown canvas with olive-green, teal and rose accents. It is defined as tokens in `src/app/globals.css` (`@theme`) and mirrored in the front matter above. Five alternate palettes (Gruvbox, Dracula, Nord, Monokai, Solarized Dark) are applied with `html[data-theme="<name>"]` overrides in the same file, switched by the `:theme <name>` command and persisted in `localStorage`. Themes change colours only, never layout. All text and UI colours meet WCAG AA contrast (enforced by `tests/e2e/accessibility.spec.ts`).
 
-### Gruvbox Dark Hard (Default Core)
-- **Primary (`#a9b665`)**: Terminal Green. Used for `-- NORMAL --` mode status accents, execution indicators, diff additions, and active cursor targets.
-- **Secondary (`#7daea3`)**: Terminal Aqua/Cyan. Applied to types, interfaces, navigation links, and buffer identifiers.
-- **Tertiary (`#d3869b`)**: Terminal Purple/Magenta. Reserved for `-- VISUAL --` mode banners, decorative brackets, and keyword highlights.
-- **Neutral (`#928374`)**: Terminal Muted Gray. Dictates line numbers, non-active statuslines, subtle gridlines, and gutter symbols.
-- **Canvas Base (`#1d2021`)**: Background substrate.
-- **Surface Elevation (`#282828`)**: Buffer panes, floating dialog windows, and popup menus.
-- **Text Main (`#ebdbb2`)**: Default foreground text.
-- **Accent Warning/Command (`#d8a657`)**: Yellow/Gold for `-- COMMAND --` state and search highlights.
-- **Accent Danger (`#ea6962`)**: Terminal Red for error markers, linting breaks, and `-- REPLACE --` state.
+### Warm (Default Core)
+- **Canvas (`#1a1208`)**: `background` / `surface`. Base substrate.
+- **Surface containers (`#231a0f` to `#3e3327`)**: `surface-container-low` through `-highest` for buffer panes, popups and pressed states.
+- **Text Main (`#f2dfce`)**: `on-surface`. Secondary text is `on-surface-variant` (`#c7c8b6`); muted gutters and placeholders use `outline` (`#959687`).
+- **Primary (`#c4d27e`)**: Olive green. `-- NORMAL --` accents, links, focus rings, active targets. Text on it is `on-primary` (`#2c3400`).
+- **Secondary (`#9ed0c5`)**: Teal. Types, navigation and buffer identifiers.
+- **Tertiary (`#ffb6c9`)**: Rose. Decorative brackets and keyword highlights.
+- **Error (`#ffb4ab`)**: Errors and `TODO` placeholder markers.
+- **Borders (`#46483a`)**: `outline-variant` for inactive pane borders.
 
-### Multi-Theme Mapping Strategy
-When swapping theme toggles, tokens remap consistently:
-- **Dracula**: Base `#282a36`, Primary `#50fa7b` (Green), Secondary `#8be9fd` (Cyan), Tertiary `#bd93f9` (Purple), Text `#f8f8f2`.
-- **Nord**: Base `#2e3440`, Primary `#a3be8c` (Green), Secondary `#88c0d0` (Frost Cyan), Tertiary `#b48ead` (Purple), Text `#eceff4`.
-- **Monokai**: Base `#272822`, Primary `#a6e22e` (Green), Secondary `#66d9ef` (Blue/Cyan), Tertiary `#ae81ff` (Purple), Text `#f8f8f2`.
-- **Solarized Dark**: Base `#002b36`, Primary `#859900` (Green), Secondary `#2aa198` (Cyan), Tertiary `#6c71c4` (Violet), Text `#839496`.
+### Alternate themes
+Each alternate overrides the same token names, so components never reference a theme directly. Base and primary per theme:
+- **Gruvbox**: Base `#282828`, Primary `#c1c33f`, Text `#ebdbb2`.
+- **Dracula**: Base `#282a36`, Primary `#cbabf9`, Text `#f8f8f2`.
+- **Nord**: Base `#2e3440`, Primary `#96c7d6`, Text `#eceff4`.
+- **Monokai**: Base `#272822`, Primary `#a6e22e`, Text `#f8f8f2`.
+- **Solarized Dark**: Base `#002b36`, Primary `#c9ab47`, Text `#eee8d5`.
+
+Primaries are lightened from the canonical palette values where needed to reach AA contrast.
 
 ## Typography
 
@@ -171,10 +173,10 @@ The layout embraces the strict, character-cell discipline of window buffers. The
 
 No soft drop-shadows or diffused blurs exist in this design system. Depth and structural hierarchy are articulated strictly through **TUI Box Borders**, **Tonal Layering**, and **Monochrome Outline Offsets**:
 
-1. **Base Layer (Elevation 0 - Canvas)**: Deep `#1d2021` representing the terminal workspace.
-2. **Active Buffer / Window Pane (Elevation 1)**: Flat `#282828` framed by a 1px solid border (`#3c3836` for inactive windows, `#7daea3` or `#a9b665` for active focused windows).
-3. **Floating Windows & Pickers (Elevation 2 - Telescope / FZF Modals)**: Framed with double-line or rounded Unicode/ASCII box-drawing lines (e.g., `┌─┐│└─┘` or `╔═╗║╚═╝`). Uses an opaque background `#282828` accompanied by a flat, un-blurred 4px offset shadow (`box-shadow: 4px 4px 0px 0px #000000`).
-4. **Tooltips & Completion Menus (Elevation 3 - CMP / LSP Popups)**: Inverted high-contrast box with a 1px highlight border in primary green.
+1. **Base Layer (Elevation 0 - Canvas)**: Deep `background` (`#1a1208`) representing the terminal workspace.
+2. **Active Buffer / Window Pane (Elevation 1)**: Flat `surface-container-low` framed by a 1px solid border (`outline-variant` for inactive windows, `secondary` or `primary` for active focused windows).
+3. **Floating Windows & Pickers (Elevation 2 - Telescope / FZF Modals)**: Framed with double-line or rounded Unicode/ASCII box-drawing lines (e.g., `┌─┐│└─┘` or `╔═╗║╚═╝`). Uses an opaque `surface-container-low` background accompanied by a flat, un-blurred 4px offset shadow (`box-shadow: 4px 4px 0px 0px #000000`).
+4. **Tooltips & Completion Menus (Elevation 3 - CMP / LSP Popups)**: Inverted high-contrast box with a 1px highlight border in `primary`.
 
 ## Shapes
 
@@ -188,9 +190,9 @@ The design system enforces `roundedness: 0` (strict 0px corner radii). Every cor
 
 ### Mode Indicators & Vim Statusline (Lualine/Airline)
 - **Structure**: A continuous, zero-gap horizontal bar divided into discrete powerline blocks.
-- **Section A (Mode)**: High-contrast inverted block displaying `-- NORMAL --` (Green `#a9b665` bg, `#1d2021` text), `-- INSERT --` (Blue/Cyan `#7daea3` bg, `#1d2021` text), or `-- COMMAND --` (Yellow `#d8a657` bg, `#1d2021` text).
-- **Section B (Branch & Diagnostics)**: Muted background (`#3c3836`) displaying Git branch icon `main` and diagnostic badges (`E:0 W:1`).
-- **Section C (File & Path)**: Subtle background (`#282828`) displaying current buffer path and modified indicator `[+]`.
+- **Section A (Mode)**: High-contrast inverted block displaying `-- NORMAL --` (`primary` bg, `on-primary` text), `-- INSERT --` (`secondary` bg, `on-secondary` text), or `-- COMMAND --` (`tertiary` bg, `on-tertiary` text).
+- **Section B (Branch & Diagnostics)**: Muted background (`surface-container-high`) displaying Git branch icon `main` and diagnostic badges (`E:0 W:1`).
+- **Section C (File & Path)**: Subtle background (`surface-container-low`) displaying current buffer path and modified indicator `[+]`.
 - **Section Z (Position & Percentage)**: Inverted block at right edge displaying `Ln 14, Col 2 [85%]`.
 
 ### Command Bar (`:`) & Quick Search (`/`)
@@ -200,8 +202,8 @@ The design system enforces `roundedness: 0` (strict 0px corner radii). Every cor
 - Accepts interactive commands like `:theme nord`, `:w portfolio.pdf`, or `:q!`.
 
 ### Buttons
-- **Primary Action**: Solid rectangular block with primary accent color (`#a9b665`), dark foreground (`#1d2021`), and bold weight. Displays cursor block `█` on hover.
-- **Secondary / Ghost Action**: `#282828` background with 1px border (`#504945`). Hover state swaps to foreground text `#ebdbb2` and shifts background to `#3c3836`.
+- **Primary Action**: Solid rectangular block with `primary` accent, `on-primary` foreground, and bold weight. Displays cursor block `█` on hover.
+- **Secondary / Ghost Action**: `surface-container-low` background with 1px `outline-variant` border. Hover swaps to `on-surface` text and shifts the background to `surface-container-high`.
 - **Keyboard Shortcut Affordance**: Buttons optionally include embedded key shortcuts rendered in brackets: `[ <CR> ]` for enter, `[ y ]` for copy.
 
 ### Chips & Syntax Tags
@@ -209,21 +211,21 @@ The design system enforces `roundedness: 0` (strict 0px corner radii). Every cor
 - Zero border radius, 1px perimeter border tinted to corresponding syntax highlight tokens (keywords = purple, types = cyan, functions = green).
 
 ### Input Fields & Textareas
-- Seamless dark background matching the buffer pane (`#1d2021` or `#282828`).
-- Framed with 1px border `#3c3836`, switching to 1px `#a9b665` on focus.
+- Seamless dark background matching the buffer pane (`surface-container-low`).
+- Framed with 1px border `outline-variant`, switching to 1px `primary` on focus.
 - Blinking block cursor (`animation: blink 1s step-end infinite`) styled via CSS pseudo-elements.
 - Integrated line-number gutter along the left margin for multi-line textarea editors.
 
 ### Checkboxes & Radio Buttons
 - Pure TUI ASCII simulation:
   - Unchecked Checkbox: `[ ]`
-  - Checked Checkbox: `[x]` (rendered in green `#a9b665`)
+  - Checked Checkbox: `[x]` (rendered in `primary`)
   - Unselected Radio: `( )`
-  - Selected Radio: `(*)` (rendered in cyan `#7daea3`)
+  - Selected Radio: `(*)` (rendered in `secondary`)
 - Toggled via click or keyboard spacebar when focused.
 
 ### Buffer Cards & Project Panes
 - Styled like isolated Vim window panes.
 - Top pane border contains an inline title: `┌─ projects/terminal-portfolio.ts ─────────┐`.
 - Bottom pane border acts as a localized mini-statusline: `└─ 74L, 2180B ────────────────── [ts] ─┘`.
-- Gutter displays sequential line numbers (`01`, `02`, `03`) in neutral muted tones (`#928374`), highlighting the active row number in gold `#d8a657`.
+- Gutter displays sequential line numbers (`01`, `02`, `03`) in neutral muted tones (`outline`), highlighting the active row number in `tertiary`.

@@ -13,9 +13,24 @@ const jetbrainsMono = localFont({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const pageTitle = `${site.name} — ${site.title}`;
+
 export const metadata: Metadata = {
-  title: `${site.name} — ${site.title}`,
+  metadataBase: new URL(siteUrl),
+  title: pageTitle,
   description: site.description,
+  openGraph: {
+    type: "website",
+    title: pageTitle,
+    description: site.description,
+    siteName: site.name,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: pageTitle,
+    description: site.description,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
