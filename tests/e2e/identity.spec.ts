@@ -20,11 +20,13 @@ test.describe("identity section", () => {
     await expect(identity.getByRole("list", { name: "Tags" })).toBeVisible();
   });
 
-  test("shows a marked placeholder until the owner photo is supplied", async ({
-    page,
-  }) => {
+  test("shows the owner photo", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByTestId("avatar")).toContainText("TODO: owner photo");
+    const photo = page.getByTestId("avatar").getByRole("img");
+    await expect(photo).toHaveAttribute("src", "/avatar.jpg");
+    await expect
+      .poll(() => photo.evaluate((el: HTMLImageElement) => el.naturalWidth))
+      .toBeGreaterThan(0);
   });
 
   test("frame counters are derived from the content", async ({ page }) => {

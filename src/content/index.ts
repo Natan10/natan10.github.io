@@ -15,7 +15,7 @@ export const content: Content = {
     bio: [
       "FullStack Software Engineer with over 5 years of experience designing and building scalable cloud-native applications using React, Node.js, .NET, Python, AWS and Azure. Passionate about distributed systems, software architecture and developer experience, with production experience in AI-powered document processing pipelines, asynchronous workflows and observability. Committed to maintainable, high-quality software through SOLID, Clean Architecture and TDD.",
     ],
-    photo: null,
+    photo: { src: "/avatar.jpg", alt: "Portrait of Natan Moreira" },
   },
   experience: [
     {
