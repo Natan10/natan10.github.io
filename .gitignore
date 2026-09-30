@@ -44,3 +44,6 @@ next-env.d.ts
 .claude
 
 .specs
+# playwright
+/test-results/
+/playwright-report/
