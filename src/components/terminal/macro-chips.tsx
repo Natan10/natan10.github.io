@@ -16,7 +16,13 @@ export function MacroChips() {
           : "group min-h-11 md:min-h-0 px-space-sm py-space-xs bg-surface-container hover:bg-surface-container-high text-label-md flex items-center gap-1 border border-outline-variant"
       }
     >
-      <span className={c.chip?.danger ? "text-error" : "text-secondary"}>
+      <span
+        className={
+          c.chip?.danger
+            ? "text-error group-hover:text-on-error-container"
+            : "text-secondary"
+        }
+      >
         [{c.aliases?.find((a) => a.startsWith("/")) ?? c.name}]
       </span>
       <span className="text-on-surface-variant group-hover:text-on-surface">

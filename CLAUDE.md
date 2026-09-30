@@ -6,6 +6,7 @@ list all my skills, key points and takeways and what i achieve
 # Project version
 - nextjs 16x
 - tailwindcss
+- @playwright/test and @axe-core/playwright (browser and accessibility tests, `npm test`)
 
 # Design
 for design tokens information see `docs/design.md`
