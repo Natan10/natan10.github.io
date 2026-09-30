@@ -1,4 +1,11 @@
 import { Identity } from "./identity";
+import {
+  Contact,
+  Experience,
+  Projects,
+  Skills,
+  Takeaways,
+} from "./sections";
 
 export function BufferWindow() {
   return (
@@ -52,6 +59,11 @@ export function BufferWindow() {
           </p>
         </section>
         <Identity />
+        <Experience />
+        <Skills />
+        <Projects />
+        <Takeaways />
+        <Contact />
       </div>
     </div>
   );
