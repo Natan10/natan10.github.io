@@ -34,3 +34,6 @@ for design tokens information see `docs/design.md`
 
 # Important 
 - every time a new dependencie was installed update this file (do it for important deps)
+- create new worktree for each spec that is going to be implemented
+- always ask user about merge worktree into main 
+- after merge commit changes and close worktree
