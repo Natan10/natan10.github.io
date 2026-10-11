@@ -70,6 +70,8 @@ export type Dictionary = {
     closeName: string;
     iframeTitle: string;
     landmark: string;
+    /** Shown in place of the embed when Spotify cannot be reached. */
+    embedError: string;
   };
   commands: CommandTexts;
 };

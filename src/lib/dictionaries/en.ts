@@ -75,6 +75,7 @@ export const en: Dictionary = {
     closeName: "Close music player",
     iframeTitle: "Spotify playlist: Natan Profile",
     landmark: "Music player",
+    embedError: "Spotify could not be loaded. Use the link above to open the playlist.",
   },
   commands: {
     "/user": {

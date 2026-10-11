@@ -75,6 +75,7 @@ export const pt: Dictionary = {
     closeName: "Fechar player de música",
     iframeTitle: "Playlist do Spotify: Natan Profile",
     landmark: "Player de música",
+    embedError: "Não foi possível carregar o Spotify. Use o link acima para abrir a playlist.",
   },
   commands: {
     "/user": {
