@@ -39,7 +39,7 @@ export function Hero({
           aria-hidden="true"
           className="text-[8px] leading-[1.32] sm:text-body-sm sm:leading-[1.32] [font-variant-ligatures:none] text-primary whitespace-pre select-none drop-shadow-[0_0_8px_rgba(196,210,126,0.35)]"
         >
-          {asciiBanner(site.bannerWord)}
+          {asciiBanner(site.bannerText)}
         </pre>
 
         <div className="mt-space-sm flex flex-col gap-space-xs">

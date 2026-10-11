@@ -4,7 +4,7 @@ import { shared } from "./shared";
 // per language and lives in the dictionary.
 export const site = {
   name: shared.profile.name,
-  bannerWord: "NATAN",
+  bannerText: "NATAN MOREIRA",
   title: shared.profile.title,
   version: "v0.1.0",
 } as const;

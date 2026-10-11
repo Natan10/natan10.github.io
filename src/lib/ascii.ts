@@ -8,6 +8,30 @@ const glyphs: Record<string, string[]> = {
     "██║  ██║",
     "╚═╝  ╚═╝",
   ],
+  E: [
+    "███████╗",
+    "██╔════╝",
+    "█████╗  ",
+    "██╔══╝  ",
+    "███████╗",
+    "╚══════╝",
+  ],
+  I: [
+    "██╗",
+    "██║",
+    "██║",
+    "██║",
+    "██║",
+    "╚═╝",
+  ],
+  M: [
+    "███╗   ███╗",
+    "████╗ ████║",
+    "██╔████╔██║",
+    "██║╚██╔╝██║",
+    "██║ ╚═╝ ██║",
+    "╚═╝     ╚═╝",
+  ],
   N: [
     "███╗   ██╗",
     "████╗  ██║",
@@ -15,6 +39,22 @@ const glyphs: Record<string, string[]> = {
     "██║╚██╗██║",
     "██║ ╚████║",
     "╚═╝  ╚═══╝",
+  ],
+  O: [
+    " ██████╗ ",
+    "██╔═══██╗",
+    "██║   ██║",
+    "██║   ██║",
+    "╚██████╔╝",
+    " ╚═════╝ ",
+  ],
+  R: [
+    "██████╗ ",
+    "██╔══██╗",
+    "██████╔╝",
+    "██╔══██╗",
+    "██║  ██║",
+    "╚═╝  ╚═╝",
   ],
   T: [
     "████████╗",
@@ -26,7 +66,7 @@ const glyphs: Record<string, string[]> = {
   ],
 };
 
-export function asciiBanner(word: string): string {
+function asciiWord(word: string): string[] {
   const letters = [...word.toUpperCase()].map((ch) => {
     const glyph = glyphs[ch];
     if (!glyph) throw new Error(`No ASCII glyph for "${ch}"`);
@@ -34,5 +74,17 @@ export function asciiBanner(word: string): string {
   });
   return Array.from({ length: 6 }, (_, row) =>
     letters.map((glyph) => glyph[row]).join(""),
-  ).join("\n");
+  );
+}
+
+/**
+ * One block per word, stacked with a blank row between them, so a full name
+ * stays as narrow as its longest word instead of one very wide line.
+ */
+export function asciiBanner(text: string): string {
+  return text
+    .trim()
+    .split(/\s+/)
+    .map((word) => asciiWord(word).join("\n"))
+    .join("\n\n");
 }
