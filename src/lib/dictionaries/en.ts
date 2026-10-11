@@ -61,6 +61,7 @@ export const en: Dictionary = {
     unknownLanguage: "E474: Unknown language: {name}",
     validLanguages: "Valid languages: {languages}",
     languageAlready: "Already using {language}",
+    kinds: { section: "section", action: "action", system: "system" },
   },
   commands: {
     "/user": {

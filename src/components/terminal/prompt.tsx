@@ -56,7 +56,11 @@ export function Prompt() {
       const completed = commonPrefix(matches.map((m) => m.text));
       setValue(matches.length === 1 ? `${completed} ` : completed);
       if (matches.length > 1) {
-        print([matches.map((m) => `${m.text} (${m.kind})`).join("   ")]);
+        print([
+          matches
+            .map((m) => `${m.text} (${dict.terminal.kinds[m.kind]})`)
+            .join("   "),
+        ]);
       }
     }
   }

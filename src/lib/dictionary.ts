@@ -1,4 +1,4 @@
-import type { CommandTexts } from "./commands";
+import type { CommandKind, CommandTexts } from "./commands";
 
 /**
  * Every piece of interface text that is not personal content. English is the
@@ -54,6 +54,8 @@ export type Dictionary = {
     unknownLanguage: string;
     validLanguages: string;
     languageAlready: string;
+    /** Kind words printed beside Tab suggestions, e.g. `/user (section)`. */
+    kinds: Record<CommandKind, string>;
   };
   commands: CommandTexts;
 };

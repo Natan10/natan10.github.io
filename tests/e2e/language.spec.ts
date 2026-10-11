@@ -26,7 +26,10 @@ const outputLines = (page: Page) => output(page).locator("p").allInnerTexts();
 /** Everything on the page that is read out loud or seen, plus accessible names. */
 const pageStrings = (page: Page) =>
   page.evaluate(() => {
-    const text = document.body.textContent ?? "";
+    // Scripts hold Next's serialised page data, which is not text a visitor reads.
+    const body = document.body.cloneNode(true) as HTMLElement;
+    body.querySelectorAll("script, style, noscript").forEach((el) => el.remove());
+    const text = body.textContent ?? "";
     const labels = [...document.querySelectorAll("[aria-label]")].map(
       (el) => el.getAttribute("aria-label") ?? "",
     );
@@ -323,22 +326,39 @@ test.describe("interface text", () => {
     for (const [key, value] of english) {
       expect(shown, key).not.toContain(value);
     }
-    // Short labels (under 3 words, so skipped above) are checked against the
-    // elements the dictionary controls: accessible names, headings, terms, buttons.
-    const surfaces = await page.evaluate(() => [
-      ...[...document.querySelectorAll("[aria-label]")].map((el) => el.getAttribute("aria-label") ?? ""),
-      ...[...document.querySelectorAll("h2, dt, button, label, #user [aria-label] + p")].map(
-        (el) => el.textContent?.trim() ?? "",
-      ),
-    ]);
+    // Placeholder entries (`{lines}`, `{file}`...) are matched as patterns, so
+    // the sr-only frame counts cannot silently stay English.
+    const patterns = Object.entries(enFlat).filter(
+      ([key, value]) => value !== ptFlat[key] && /\{\w+\}/.test(value),
+    );
+    expect(patterns.length).toBeGreaterThan(5);
+    for (const [key, value] of patterns) {
+      const source = value
+        .split(/\{\w+\}/)
+        .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+        .join(".+?");
+      expect(shown, key).not.toMatch(new RegExp(source));
+    }
+    // Short entries (under 3 words) are matched as whole words anywhere on the
+    // page. Two are allowed because the English word occurs in other text:
+    // "Stack" is part of the technology name "Elastic Stack", and the connective
+    // "or" is covered by the positive check on the Portuguese intro below, and
+    // "system" occurs in the content ("design system"); the Tab suggestion kinds
+    // have their own test.
+    const allowedShort = new Set(["sections.stack", "hero.intro.or", "terminal.kinds.system"]);
     const shortEnglish = Object.entries(enFlat).filter(
       ([key, value]) =>
-        value !== ptFlat[key] && !value.includes("{") && value.split(/\s+/).length < 3,
+        value !== ptFlat[key] &&
+        !/\{\w+\}/.test(value) &&
+        value.trim().split(/\s+/).length < 3 &&
+        !allowedShort.has(key),
     );
     expect(shortEnglish.length).toBeGreaterThan(5);
     for (const [key, value] of shortEnglish) {
-      expect(surfaces, key).not.toContain(value);
+      const word = value.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      expect(shown, key).not.toMatch(new RegExp(`(^|[^\\p{L}\\d])${word}($|[^\\p{L}\\d])`, "u"));
     }
+    await expect(page.getByText("Execute comandos começando com / ou :, ou acione buffers rápidos")).toBeVisible();
     // Labelled regions carry Portuguese names.
     await expect(page.getByRole("region", { name: "Registro de inicialização da sessão" })).toBeVisible();
     await expect(page.getByRole("log", { name: "Saída dos comandos" })).toBeAttached();
@@ -346,7 +366,7 @@ test.describe("interface text", () => {
     expect(await page.locator('ul[aria-label="Tecnologias"]').count()).toBeGreaterThan(0);
     expect(await page.locator('ul[aria-label="Etiquetas"]').count()).toBeGreaterThan(0);
     // Terminal tokens are identical to the English page.
-    const tokens = await page.evaluate(() => document.body.textContent ?? "");
+    const tokens = shown;
     for (const token of [
       "NORMAL",
       "UTF-8",
@@ -356,6 +376,11 @@ test.describe("interface text", () => {
       "guest@portfolio:~$",
       "NODE: node-01a.sfo3",
       "BAUD: 38400 | ARCH: x86_64-retro | TERM: xterm-256color",
+      "EXEC",
+      "[SYSTEM]:",
+      "[OK]",
+      "profile.vim",
+      "⎇ main",
     ]) {
       expect(tokens, token).toContain(token);
     }
@@ -364,6 +389,31 @@ test.describe("interface text", () => {
     expect(tokens).toContain("0 erros 0 avisos");
     expect(tokens).toContain("[INICIALIZAÇÃO DA SESSÃO: 0.0014s]");
     expect(tokens).not.toContain("SESSION BOOT");
+    // COMMAND shows while the prompt is focused; the cv label is a token too.
+    await prompt(page).focus();
+    await expect(page.getByTestId("mode")).toHaveText("COMMAND");
+    await expect(page.locator("#contact").getByText("cv", { exact: true })).toBeVisible();
+  });
+
+  test("[C14] only the intended tokens are identical in both dictionaries", () => {
+    // An entry that is the same in both languages is skipped by the page checks
+    // above, so the allowed ones are pinned here: any other entry that drifts
+    // back to English fails this list.
+    const identical = Object.keys(flat(dictEn)).filter(
+      (key) => flat(dictEn)[key] === flat(dictPt)[key],
+    );
+    expect(identical.sort()).toEqual(["prompt.exec", "sections.status"]);
+  });
+
+  test("[C14] Tab suggestions on /pt name their kinds in Portuguese", async ({ page }) => {
+    await page.goto("/pt", { waitUntil: "networkidle" });
+    await prompt(page).fill("/");
+    await prompt(page).press("Tab");
+    const line = (await outputLines(page)).at(-1)!;
+    expect(line).toContain("/user (seção)");
+    expect(line).toContain("/language (ação)");
+    expect(line).toContain("/help (sistema)");
+    expect(line).not.toMatch(/\((section|action|system)\)/);
   });
 
   test("[C15] /help on /pt lists every command with its Portuguese description", async ({
@@ -640,8 +690,8 @@ test.describe("language switch", () => {
       const card = hero.locator(":scope > div").nth(1);
       const cardBox = (await card.boundingBox())!;
       const toggleBox = (await toggle.boundingBox())!;
-      expect(toggleBox.y - cardBox.y).toBeLessThan(80);
-      expect(cardBox.x + cardBox.width - (toggleBox.x + toggleBox.width)).toBeLessThan(80);
+      expect(toggleBox.y - cardBox.y).toBeLessThan(40);
+      expect(cardBox.x + cardBox.width - (toggleBox.x + toggleBox.width)).toBeLessThan(40);
       const chip = (await hero.getByRole("button", { name: /^\[\/help\]/ }).boundingBox())!;
       expect(toggleBox.y + toggleBox.height).toBeLessThan(chip.y);
       await expect(toggle.getByRole("listitem")).toHaveText(["EN", "PT"]);
