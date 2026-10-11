@@ -9,8 +9,16 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
-import { content } from "@/content";
+import type { Content } from "@/content/types";
 import { commands, find, parse } from "@/lib/commands";
+import type { Dictionary } from "@/lib/dictionary";
+import {
+  fill,
+  isLanguage,
+  LANGUAGE_INFO,
+  LANGUAGES,
+  type Language,
+} from "@/lib/i18n";
 import {
   getServerTheme,
   getTheme,
@@ -30,6 +38,8 @@ type Terminal = {
   history: readonly string[];
   run: (input: string) => void;
   print: (lines: readonly string[]) => void;
+  language: Language;
+  dict: Dictionary;
 };
 
 const TerminalContext = createContext<Terminal | null>(null);
@@ -51,16 +61,26 @@ function scrollToSection(id: string) {
   window.setTimeout(() => el.removeAttribute("data-highlight"), HIGHLIGHT_MS);
 }
 
-function downloadCv() {
+function downloadCv(cv: Content["cv"]) {
   const a = document.createElement("a");
-  a.href = content.cv.href;
-  a.download = content.cv.filename;
+  a.href = cv.href;
+  a.download = cv.filename;
   document.body.appendChild(a);
   a.click();
   a.remove();
 }
 
-export function TerminalProvider({ children }: { children: ReactNode }) {
+export function TerminalProvider({
+  children,
+  language,
+  dict,
+  cv,
+}: {
+  children: ReactNode;
+  language: Language;
+  dict: Dictionary;
+  cv: Content["cv"];
+}) {
   const [log, setLog] = useState<LogLine[]>([]);
   const [history, setHistory] = useState<string[]>([]);
   const nextId = useRef(0);
@@ -87,15 +107,18 @@ export function TerminalProvider({ children }: { children: ReactNode }) {
       const { name, args } = parse(trimmed);
       const command = find(name);
       const echo = { kind: "cmd" as const, text: trimmed };
+      const t = dict.terminal;
 
       if (!command) {
         append([
           echo,
-          { kind: "err", text: `E492: Not an editor command: ${trimmed}` },
-          { kind: "out", text: "Try /help for a list of commands." },
+          { kind: "err", text: fill(t.unknownCommand, { input: trimmed }) },
+          { kind: "out", text: t.unknownHint },
         ]);
         return;
       }
+
+      const texts = dict.commands[command.name];
 
       switch (command.name) {
         case "/clear":
@@ -104,25 +127,19 @@ export function TerminalProvider({ children }: { children: ReactNode }) {
         case "/help":
           append([
             echo,
-            { kind: "out", text: "Available commands:" },
+            { kind: "out", text: t.helpHeading },
             ...commands.map((c) => ({
               kind: "out" as const,
-              text: `  ${[c.name, ...(c.aliases ?? [])].join(", ").padEnd(22)} ${c.description}`,
+              text: `  ${[c.name, ...(c.aliases ?? [])].join(", ").padEnd(22)} ${dict.commands[c.name].description}`,
             })),
           ]);
           return;
         case ":w":
-          downloadCv();
-          append([echo, { kind: "out", text: `"${content.cv.filename}" written (CV download started)` }]);
+          downloadCv(cv);
+          append([echo, { kind: "out", text: fill(t.cvWritten, { file: cv.filename }) }]);
           return;
         case ":q":
-          append([
-            echo,
-            {
-              kind: "err",
-              text: "E37: No write since last change. This buffer is read-only and the page isn't going anywhere — try :w instead.",
-            },
-          ]);
+          append([echo, { kind: "err", text: t.quit }]);
           return;
         case ":theme": {
           const wanted = args[0];
@@ -130,33 +147,61 @@ export function TerminalProvider({ children }: { children: ReactNode }) {
           if (!wanted) {
             append([
               echo,
-              { kind: "out", text: `themes: ${valid}` },
-              { kind: "out", text: `active: ${theme}` },
+              { kind: "out", text: fill(t.themes, { themes: valid }) },
+              { kind: "out", text: fill(t.themeActive, { theme }) },
             ]);
           } else if (isTheme(wanted)) {
             setTheme(wanted);
-            append([echo, { kind: "out", text: `Theme set to ${wanted}` }]);
+            append([echo, { kind: "out", text: fill(t.themeSet, { theme: wanted }) }]);
           } else {
             append([
               echo,
-              { kind: "err", text: `E474: Unknown theme: ${wanted}` },
-              { kind: "out", text: `Valid themes: ${valid}` },
+              { kind: "err", text: fill(t.unknownTheme, { name: wanted }) },
+              { kind: "out", text: fill(t.validThemes, { themes: valid }) },
             ]);
+          }
+          return;
+        }
+        case "/language": {
+          const wanted = args[0];
+          const valid = LANGUAGES.join(" | ");
+          if (!wanted) {
+            append([
+              echo,
+              { kind: "out", text: fill(t.languages, { languages: valid }) },
+              { kind: "out", text: fill(t.languageActive, { language }) },
+            ]);
+          } else if (!isLanguage(wanted)) {
+            append([
+              echo,
+              { kind: "err", text: fill(t.unknownLanguage, { name: wanted }) },
+              { kind: "out", text: fill(t.validLanguages, { languages: valid }) },
+            ]);
+          } else if (wanted === language) {
+            append([
+              echo,
+              {
+                kind: "out",
+                text: fill(t.languageAlready, { language: LANGUAGE_INFO[wanted].name }),
+              },
+            ]);
+          } else {
+            window.location.assign(LANGUAGE_INFO[wanted].path);
           }
           return;
         }
       }
 
-      if (command.target) {
+      if (command.target && "result" in texts) {
         scrollToSection(command.target);
-        append([echo, { kind: "out", text: command.result ?? `Opened ${command.name}` }]);
+        append([echo, { kind: "out", text: texts.result }]);
       }
     },
-    [append, theme],
+    [append, theme, language, dict, cv],
   );
 
   return (
-    <TerminalContext value={{ log, history, run, print }}>
+    <TerminalContext value={{ log, history, run, print, language, dict }}>
       {children}
     </TerminalContext>
   );

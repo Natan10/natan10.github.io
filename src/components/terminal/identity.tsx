@@ -1,15 +1,22 @@
-import { content } from "@/content";
+import type { Content } from "@/content/types";
+import type { Dictionary } from "@/lib/dictionary";
 import { identityLines } from "@/lib/section-text";
 import { SectionFrame } from "./section-frame";
 
-export function Identity() {
-  const { profile } = content;
+export function Identity({
+  profile,
+  dict,
+}: {
+  profile: Content["profile"];
+  dict: Dictionary;
+}) {
   return (
     <SectionFrame
       id="user"
       command="/user"
       file="~/.terminal/user.json"
       lines={identityLines(profile)}
+      countsLabel={dict.sections.frameCounts}
     >
       <div className="flex flex-col sm:flex-row gap-space-lg">
         <div
@@ -26,13 +33,13 @@ export function Identity() {
               className="w-full h-full object-cover"
             />
           ) : (
-            <span>TODO: owner photo</span>
+            <span>{dict.sections.photoPlaceholder}</span>
           )}
         </div>
         <div className="flex flex-col gap-space-sm min-w-0">
           <h2 className="text-headline-lg text-primary">{profile.name}</h2>
           <p className="text-body-lg text-on-surface">{profile.title}</p>
-          <ul aria-label="Tags" className="flex flex-wrap gap-space-xs">
+          <ul aria-label={dict.sections.tags} className="flex flex-wrap gap-space-xs">
             {profile.tags.map((tag) => (
               <li
                 key={tag}
@@ -43,9 +50,9 @@ export function Identity() {
             ))}
           </ul>
           <dl className="grid grid-cols-[auto_1fr] gap-x-space-md text-body-md">
-            <dt className="text-outline">location</dt>
+            <dt className="text-outline">{dict.sections.location}</dt>
             <dd>{profile.location}</dd>
-            <dt className="text-outline">status</dt>
+            <dt className="text-outline">{dict.sections.status}</dt>
             <dd>
               <span className="text-primary font-bold">
                 {profile.availability.status}

@@ -1,10 +1,10 @@
-import { content } from "./index";
+import { shared } from "./shared";
 
+// Site-wide values that do not change with the language. The description is
+// per language and lives in the dictionary.
 export const site = {
-  name: content.profile.name,
+  name: shared.profile.name,
   bannerWord: "NATAN",
-  title: content.profile.title,
-  description:
-    "Personal portfolio of Natan Moreira, software engineer: experience, skills, projects and key takeaways.",
+  title: shared.profile.title,
   version: "v0.1.0",
 } as const;

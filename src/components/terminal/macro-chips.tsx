@@ -3,8 +3,12 @@
 import { chipCommands } from "@/lib/commands";
 import { useTerminal } from "./terminal-provider";
 
+function chipCaption(texts: object): string {
+  return "chip" in texts && typeof texts.chip === "string" ? texts.chip : "";
+}
+
 export function MacroChips() {
-  const { run } = useTerminal();
+  const { run, dict } = useTerminal();
   return chipCommands.map((c) => (
     <button
       key={c.name}
@@ -26,7 +30,7 @@ export function MacroChips() {
         [{c.aliases?.find((a) => a.startsWith("/")) ?? c.name}]
       </span>
       <span className="text-on-surface-variant group-hover:text-on-surface">
-        {c.chip?.label}
+        {chipCaption(dict.commands[c.name])}
       </span>
     </button>
   ));

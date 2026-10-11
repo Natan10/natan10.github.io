@@ -6,7 +6,7 @@ import { commonPrefix, suggest } from "@/lib/commands";
 import { useTerminal } from "./terminal-provider";
 
 export function Prompt() {
-  const { run, history, print } = useTerminal();
+  const { run, history, print, dict } = useTerminal();
   const [value, setValue] = useState("");
   // Position while walking history; history.length means "the draft".
   const [cursor, setCursor] = useState<number | null>(null);
@@ -74,7 +74,7 @@ export function Prompt() {
         className="text-primary font-bold text-label-md shrink-0"
       >
         <span aria-hidden="true">❯</span>
-        <span className="sr-only">Command</span>
+        <span className="sr-only">{dict.prompt.label}</span>
       </label>
       <input
         id="command-prompt"
@@ -96,14 +96,14 @@ export function Prompt() {
         type="submit"
         className="min-h-11 md:min-h-0 px-space-md md:px-space-sm py-space-xs bg-primary text-on-primary text-label-md font-bold"
       >
-        EXEC
+        {dict.prompt.exec}
       </button>
       <button
         type="button"
         onClick={() => run("/clear")}
         className="min-h-11 md:min-h-0 px-space-md md:px-space-sm py-space-xs bg-surface-container-high text-error text-label-md border border-outline-variant"
       >
-        CLEAR
+        {dict.prompt.clear}
       </button>
     </form>
   );

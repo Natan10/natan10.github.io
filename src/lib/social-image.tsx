@@ -1,13 +1,10 @@
 import { ImageResponse } from "next/og";
+import { shared } from "@/content/shared";
 import { site } from "@/content/site";
-import { content } from "@/content";
 
-export const alt = `${site.name} — ${site.title}`;
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
-
-// Colours mirror the default warm theme in globals.css.
-export default function OpengraphImage() {
+// Colours mirror the default warm theme in globals.css. The image holds only
+// the owner's name, title and tags, none of which change with the language.
+export function renderSocialImage() {
   return new ImageResponse(
     (
       <div
@@ -49,10 +46,10 @@ export default function OpengraphImage() {
             marginTop: 40,
           }}
         >
-          {content.profile.tags.join(" · ")}
+          {shared.profile.tags.join(" · ")}
         </div>
       </div>
     ),
-    size,
+    { width: 1200, height: 630 },
   );
 }

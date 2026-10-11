@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { isEditable } from "@/lib/keyboard";
+import { useTerminal } from "./terminal-provider";
 
 const LINE_HEIGHT = 22;
 const SCROLL_STEP = 66;
@@ -19,6 +20,7 @@ function readPosition(): Position {
 }
 
 export function Statusline() {
+  const { dict } = useTerminal();
   const [command, setCommand] = useState(false);
   const [pos, setPos] = useState<Position>({ line: 1, percent: 0 });
   const lastG = useRef(0);
@@ -86,7 +88,7 @@ export function Statusline() {
         <span className="hidden md:inline text-secondary truncate">⎇ main</span>
         <span className="hidden md:inline text-on-surface-variant">UTF-8</span>
         <span className="hidden md:inline text-primary-container">
-          ✓ 0 errors 0 warnings
+          {dict.statusline.diagnostics}
         </span>
       </div>
       <span data-testid="position" className="text-on-surface-variant shrink-0">

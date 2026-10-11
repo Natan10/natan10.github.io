@@ -1,8 +1,17 @@
 import { asciiBanner } from "@/lib/ascii";
 import { site } from "@/content/site";
+import type { Dictionary } from "@/lib/dictionary";
+import type { Language } from "@/lib/i18n";
+import { LanguageToggle } from "./language-toggle";
 import { MacroChips } from "./macro-chips";
 
-export function Hero() {
+export function Hero({
+  dict,
+  language,
+}: {
+  dict: Dictionary;
+  language: Language;
+}) {
   return (
     <header className="w-full pt-space-md pb-space-lg flex flex-col gap-space-sm">
       <div
@@ -11,7 +20,7 @@ export function Hero() {
       >
         <span className="text-secondary flex items-center gap-1">
           <span className="inline-block w-2 h-2 bg-secondary animate-pulse" />
-          VT220-COMPATIBLE HARDWARE TERMINAL [80x25 EMULATION]
+          {dict.hero.hardware}
         </span>
         <span className="text-outline">
           BAUD: 38400 | ARCH: x86_64-retro | TERM: xterm-256color
@@ -33,22 +42,27 @@ export function Hero() {
           <p className="text-headline-md text-primary-fixed tracking-wide">
             {site.title.toUpperCase()}{" "}
             <span className="text-secondary text-label-md">
-              {site.version} — TTY1 READY
+              {site.version} — {dict.hero.ready}
             </span>
           </p>
           <p className="text-body-md text-on-surface-variant max-w-3xl">
-            Modal workspace session initialized. Execute commands starting with{" "}
-            <span className="text-primary font-bold">/</span> or{" "}
-            <span className="text-secondary font-bold">:</span>, or trigger
-            quick buffers from the macro registers below.
+            {dict.hero.intro.before}
+            <span className="text-primary font-bold">/</span>
+            {dict.hero.intro.or}
+            <span className="text-secondary font-bold">:</span>
+            {dict.hero.intro.after}
           </p>
         </div>
 
         <div className="mt-space-md pt-space-sm w-full flex flex-wrap items-center gap-space-xs">
           <span className="text-label-sm text-outline mr-space-xs uppercase">
-            Macro Registers:
+            {dict.hero.macroRegisters}
           </span>
           <MacroChips />
+          <LanguageToggle
+            current={language}
+            label={dict.language.navLabel}
+          />
         </div>
       </div>
     </header>

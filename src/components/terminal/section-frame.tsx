@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { fill } from "@/lib/i18n";
 import { measure, statusTag } from "@/lib/section-text";
 
 type Props = {
@@ -7,10 +8,12 @@ type Props = {
   file: string;
   /** Plain-text lines of the section; drives the footer counters and tag. */
   lines: readonly string[];
+  /** Template for the screen-reader counts, with `{lines}` and `{bytes}`. */
+  countsLabel: string;
   children: ReactNode;
 };
 
-export function SectionFrame({ id, command, file, lines, children }: Props) {
+export function SectionFrame({ id, command, file, lines, countsLabel, children }: Props) {
   const { lines: l, bytes } = measure(lines);
   const tag = statusTag(lines);
   return (
@@ -33,7 +36,7 @@ export function SectionFrame({ id, command, file, lines, children }: Props) {
           └── {l}L, {bytes}B ──┘
         </span>
         <span className="sr-only">
-          {l} lines, {bytes} bytes
+          {fill(countsLabel, { lines: l, bytes })}
         </span>
         <span className={tag === "TODO" ? "text-error" : "text-primary"}>
           [{tag}]

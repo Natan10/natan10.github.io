@@ -3,12 +3,12 @@
 import { useTerminal } from "./terminal-provider";
 
 export function OutputStream() {
-  const { log } = useTerminal();
+  const { log, dict } = useTerminal();
   return (
     <div
       role="log"
       aria-live="polite"
-      aria-label="Command output"
+      aria-label={dict.output.label}
       className="flex flex-col text-body-md"
     >
       {log.map((line) => (
