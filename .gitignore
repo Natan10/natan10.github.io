@@ -55,3 +55,7 @@ next-env.d.ts
 /playwright-report/
 
 .specs
+
+.test-results
+
+skills-lock.json
