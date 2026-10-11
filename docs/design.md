@@ -174,7 +174,7 @@ No soft drop-shadows or diffused blurs exist in this design system. Depth and st
 
 1. **Base Layer (Elevation 0 - Canvas)**: Deep `background` (`#1a1208`) representing the terminal workspace.
 2. **Active Buffer / Window Pane (Elevation 1)**: Flat `surface-container-low` framed by a 1px solid border (`outline-variant` for inactive windows, `secondary` or `primary` for active focused windows).
-3. **Floating Windows & Pickers (Elevation 2 - Telescope / FZF Modals)**: Framed with double-line or rounded Unicode/ASCII box-drawing lines (e.g., `┌─┐│└─┘` or `╔═╗║╚═╝`). Uses an opaque `surface-container-low` background accompanied by a flat, un-blurred 4px offset shadow (`box-shadow: 4px 4px 0px 0px #000000`).
+3. **Floating Windows & Pickers (Elevation 2 - Telescope / FZF Modals)**: Framed with double-line or rounded Unicode/ASCII box-drawing lines (e.g., `┌─┐│└─┘` or `╔═╗║╚═╝`). Uses an opaque `surface-container-low` background accompanied by a flat, un-blurred 4px offset shadow (`box-shadow: 4px 4px 0px 0px #000000`). The only window docked to the bottom edge, the music player strip, uses the same offset mirrored upward: the `shadow-flat-up` token (`4px -4px 0 0 #000000`) in `globals.css`.
 4. **Tooltips & Completion Menus (Elevation 3 - CMP / LSP Popups)**: Inverted high-contrast box with a 1px highlight border in `primary`.
 
 ## Shapes

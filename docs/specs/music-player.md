@@ -1,6 +1,6 @@
 # Music player: the `/music` command
 
-> Status: spec, not yet implemented. Decided in a grilling session on 2026-10-11.
+> Status: implemented on branch `feat-music-player` (code review fixes in `feat-music-player-fixes`). Decided in a grilling session on 2026-10-11.
 > UI mock: [`docs/mocks/music-player.html`](../mocks/music-player.html) (standalone, open it in a browser and resize).
 
 ## Intent
@@ -129,9 +129,30 @@ manual look at the real embed, because the embed's own pixels are outside the te
 
 ## Unresolved
 
-- **The EN/PT texts above and the "unknown argument" behaviour** were proposed in the last question round; the owner
-  asked for the spec before answering. Treated as accepted unless changed during implementation review.
-- **The test plan** above was proposed in the same round and is treated the same way.
+Resolved during implementation and review:
+
+- **The EN/PT texts and the "unknown argument" behaviour** were accepted as drafted above. The error names the
+  offending token as typed (case kept): `/music FoO` prints `unknown argument: FoO`, and `/music off extra` prints
+  `unknown argument: extra`, since `off` itself is valid.
+- **The test plan** was accepted and implemented in `tests/e2e/` (`music-*.spec.ts`, `spotify-link.spec.ts`).
+- **Contact link (D11) deviation:** the "Spotify playlist ↗" link is a `<p>` below the contact list rather than a list
+  item.
+- **Blocked-embed detection (criterion 15) deviation:** a blocked iframe still fires `load` in Chromium, so `load`
+  cannot tell success from failure. The embed uses three signals: a `no-cors` `HEAD` fetch probe of the embed URL
+  (rejects when the network or a blocker refuses it; a `HEAD` so the document is not downloaded twice), the iframe's
+  `error` event, and an 8 second timeout. A refused probe or an `error` event is final: the iframe is removed and the
+  error replaces it. The timeout alone is not final: the iframe stays mounted but hidden, and if it loads and the probe
+  succeeds later, the error goes away and the embed shows. The error sits in a `role="status"` region that is always
+  mounted, so it is announced.
+- **Focus on close:** pressing `[x]` with the keyboard moves focus to the prompt (the button unmounts); a pointer
+  click leaves focus alone, so phones do not open the keyboard.
+- **Iframe permissions:** `allow` is `clipboard-write; encrypted-media; fullscreen; picture-in-picture`. `autoplay` is
+  deliberately left out (criterion 2).
+- **Sizes:** the strip (108px), embed (80px) and statusline (32px) are theme tokens in `globals.css`; the page padding is
+  derived from them. The shadow is `shadow-flat-up`, the design system's flat black offset (see `docs/design.md`).
+
+Still open:
+
 - **Embed behaviour is outside our control.** Visitors who are not logged in to Spotify hear 30-second previews with a
   "Preview" badge that cannot be hidden. If Spotify changes the embed's compact layout or background, D5 and D7 need a
   re-check.
