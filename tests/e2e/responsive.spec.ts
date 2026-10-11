@@ -53,33 +53,25 @@ test.describe("mobile (375px)", () => {
     await expect(footer.getByText(/0 errors/)).toBeHidden();
   });
 
-  test("top-bar tabs stay visible and usable", async ({ page }) => {
-    const tab = page.getByRole("button", { name: "[3: skills.json]" });
-    await expect(tab).toBeVisible();
-    await tab.click();
+  test("chips stay usable and scroll to the section", async ({ page }) => {
+    await page.getByRole("button", { name: /\[\/skills\]/ }).click();
     const section = page.locator("section#skills");
     await expect(section).toBeInViewport();
-    // The fixed header must not cover the top of the section it scrolled to.
-    const headerBottom = await page
-      .locator("header")
-      .first()
-      .evaluate((el) => el.getBoundingClientRect().bottom);
     await expect
       .poll(() => section.evaluate((el) => el.getBoundingClientRect().top))
-      .toBeGreaterThanOrEqual(headerBottom - 1);
+      .toBeGreaterThanOrEqual(0);
   });
 
-  test("chips, tabs and prompt controls have comfortable tap targets", async ({
+  test("chips and prompt controls have comfortable tap targets", async ({
     page,
   }) => {
     const targets = [
       ...(await page.getByRole("button", { name: /^\[\// }).all()),
-      ...(await page.getByRole("button", { name: /^\[\d:/ }).all()),
       page.getByRole("button", { name: "EXEC" }),
       page.getByRole("button", { name: "CLEAR", exact: true }),
       page.getByRole("textbox", { name: "Command" }),
     ];
-    expect(targets.length).toBeGreaterThan(10);
+    expect(targets.length).toBeGreaterThanOrEqual(10);
     for (const target of targets) {
       const box = await target.boundingBox();
       expect(box!.height, await target.innerText().catch(() => "")).toBeGreaterThanOrEqual(44);
@@ -88,15 +80,12 @@ test.describe("mobile (375px)", () => {
 });
 
 test.describe("tablet (768px)", () => {
-  test("uses the desktop statusline and inline tabs without breakage", async ({
+  test("uses the desktop statusline without breakage", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 768, height: 800 });
     await page.goto("/", { waitUntil: "networkidle" });
     await expect(page.locator("footer").getByText("UTF-8")).toBeVisible();
-    await expect(page.getByRole("button", { name: "[1: console.sh]" })).toBeVisible();
-    const header = await page.locator("header").first().boundingBox();
-    expect(header!.height).toBeLessThanOrEqual(65);
   });
 });
 
@@ -106,8 +95,6 @@ test.describe("desktop (1024px and up)", () => {
       await page.setViewportSize({ width, height: 800 });
       await page.goto("/", { waitUntil: "networkidle" });
       await expect(page.locator("footer").getByText("⎇ main")).toBeVisible();
-      const header = await page.locator("header").first().boundingBox();
-      expect(header!.height).toBeLessThanOrEqual(65);
     });
   }
 });

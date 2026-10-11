@@ -4,8 +4,6 @@ test.describe("walking skeleton", () => {
   test("shows the terminal shell, hero and boot card", async ({ page }) => {
     await page.goto("/");
 
-    await expect(page.getByText("guest@terminal:")).toBeVisible();
-    await expect(page.getByText("[1: console.sh]")).toBeVisible();
     await expect(page.getByText("Macro Registers:")).toBeVisible();
     await expect(
       page.getByRole("button", { name: /^\[\/(user|experience|skills|projects|theme|help|clear)\]/ }),

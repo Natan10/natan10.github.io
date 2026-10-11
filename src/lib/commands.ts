@@ -9,13 +9,11 @@ export type Command = {
   target?: string;
   /** Macro chip shown in the hero. */
   chip?: { label: string; danger?: boolean };
-  /** Top-bar tab label. */
-  tab?: string;
   /** One-line confirmation printed after running. */
   result?: string;
 };
 
-// The single source of truth for the prompt, autocomplete, /help, chips and tabs.
+// The single source of truth for the prompt, autocomplete, /help and chips.
 export const commands: readonly Command[] = [
   {
     name: "/user",
@@ -23,7 +21,6 @@ export const commands: readonly Command[] = [
     target: "user",
     description: "Show the identity summary",
     chip: { label: "identity" },
-    tab: "[1: console.sh]",
     result: "Opened identity → ~/.terminal/user.json",
   },
   {
@@ -32,7 +29,6 @@ export const commands: readonly Command[] = [
     target: "experience",
     description: "Show the experience timeline",
     chip: { label: "history" },
-    tab: "[2: experience.log]",
     result: "Opened experience timeline → ~/.terminal/experience.log",
   },
   {
@@ -41,7 +37,6 @@ export const commands: readonly Command[] = [
     target: "skills",
     description: "Show the skills matrix",
     chip: { label: "matrix" },
-    tab: "[3: skills.json]",
     result: "Opened skills matrix → ~/.terminal/skills.json",
   },
   {
@@ -78,7 +73,6 @@ export const commands: readonly Command[] = [
     kind: "system",
     description: "List every available command",
     chip: { label: "manpage" },
-    tab: "[4: help.txt]",
   },
   {
     name: "/clear",
@@ -100,7 +94,6 @@ export const commands: readonly Command[] = [
 ];
 
 export const chipCommands = commands.filter((c) => c.chip);
-export const tabCommands = commands.filter((c) => c.tab);
 
 /** Case-insensitive, whitespace-trimmed; the first word is the command name. */
 export function parse(input: string): { name: string; args: string[] } {

@@ -59,12 +59,6 @@ test.describe("command prompt", () => {
     await expect(output(page)).toContainText("Opened experience");
   });
 
-  test("top-bar tabs run their command", async ({ page }) => {
-    await page.getByRole("button", { name: "[3: skills.json]" }).click();
-    await expect(page.locator("section#skills")).toBeInViewport();
-    await expect(output(page)).toContainText("Opened skills");
-  });
-
   test("/help lists every command and chips reflect the same set", async ({
     page,
   }) => {

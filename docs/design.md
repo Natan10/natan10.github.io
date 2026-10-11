@@ -159,10 +159,9 @@ The type system is strictly monospaced via `JetBrains Mono`. Visual hierarchy is
 ## Layout & Spacing
 
 The layout embraces the strict, character-cell discipline of window buffers. The screen is organized as a primary terminal shell composed of:
-1. **Top Tabline / Buffer Bar**: Displays open virtual buffers (`[1: index.md]`, `[2: projects.rs]`, `[3: contact.sh]`).
-2. **Main Buffer Viewport**: Employs a 12-column split-pane layout for desktop (`w-full` with fixed sidebars mimicking file trees like `nvim-tree` or `oil.nvim`).
-3. **Statusline**: Fixed height, edge-to-edge airline/lualine layout sitting directly above the command prompt.
-4. **Commandline / Mini-buffer**: Dedicated bottom execution row (`:w`, `:theme dracula`, `/search`).
+1. **Main Buffer Viewport**: Employs a 12-column split-pane layout for desktop (`w-full` with fixed sidebars mimicking file trees like `nvim-tree` or `oil.nvim`).
+2. **Statusline**: Fixed height, edge-to-edge airline/lualine layout sitting directly above the command prompt.
+3. **Commandline / Mini-buffer**: Dedicated bottom execution row (`:w`, `:theme dracula`, `/search`).
 
 ### Breakpoints & Reflow
 - **Desktop (>= 1024px)**: Dual or triple buffer splits allowed (e.g., file-tree 25%, main editor pane 50%, live REPL / preview 25%).

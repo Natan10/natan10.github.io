@@ -27,10 +27,8 @@ for design tokens information see `docs/design.md`
         - data
 ```
 
-
 # Commits
 - use convetional commits pattern https://www.conventionalcommits.org/en/v1.0.0/
-
 
 # Important 
 - every time a new dependencie was installed update this file (do it for important deps)

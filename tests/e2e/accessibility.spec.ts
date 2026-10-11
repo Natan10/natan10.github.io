@@ -60,8 +60,8 @@ test.describe("focus", () => {
       expect(info.width, info.id).toBeGreaterThanOrEqual(2);
       expect(info.color, info.id).not.toBe("rgba(0, 0, 0, 0)");
     }
-    // chips + tabs + prompt controls + section links must all have been reached
-    expect(seen.size).toBeGreaterThanOrEqual(21);
+    // chips + prompt controls + section links must all have been reached
+    expect(seen.size).toBeGreaterThanOrEqual(17);
   });
 });
 

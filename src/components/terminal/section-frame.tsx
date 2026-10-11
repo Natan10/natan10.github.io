@@ -17,7 +17,7 @@ export function SectionFrame({ id, command, file, lines, children }: Props) {
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className="border border-outline-variant bg-surface-container-lowest scroll-mt-28 md:scroll-mt-20"
+      className="border border-outline-variant bg-surface-container-lowest scroll-mt-space-md"
     >
       <div
         className="px-space-md py-space-xs flex items-center justify-between gap-space-sm text-label-md text-secondary"
