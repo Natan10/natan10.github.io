@@ -50,7 +50,7 @@ export function BufferWindow({
           className="flex flex-col gap-space-xs text-on-surface-variant bg-surface-container-lowest p-space-md border border-outline-variant"
         >
           <div className="flex items-center justify-between text-label-sm text-outline">
-            <span>[SESSION BOOT: 0.0014s]</span>
+            <span>{dict.boot.sessionBoot}</span>
             <span>NODE: node-01a.sfo3</span>
           </div>
           <p className="text-primary font-bold">

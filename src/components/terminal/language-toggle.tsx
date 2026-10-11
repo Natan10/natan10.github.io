@@ -6,7 +6,7 @@ const ITEM =
   "min-h-11 md:min-h-0 px-space-sm py-space-xs flex items-center text-label-md border border-outline-variant";
 
 /**
- * EN | PT toggle. The other language is a plain link to its route, so it works
+ * EN | PT toggle, in the top-right corner of the hero card. The other language is a plain link to its route, so it works
  * with or without JavaScript. The other page opens at its top.
  */
 export function LanguageToggle({
@@ -17,7 +17,10 @@ export function LanguageToggle({
   label: string;
 }) {
   return (
-    <nav aria-label={label} className="sm:ml-auto">
+    <nav
+      aria-label={label}
+      className="self-end mb-space-sm sm:mb-0 sm:absolute sm:top-space-md sm:right-space-md"
+    >
       <ul className="flex items-center gap-space-xs">
         {LANGUAGES.map((language) => {
           const info = LANGUAGE_INFO[language];

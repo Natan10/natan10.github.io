@@ -12,6 +12,9 @@ test.describe("/pt fit and finish", () => {
     test(`[C33] no axe violations on /pt in the ${theme} theme`, async ({ page }) => {
       await seedTheme(page, theme);
       await page.goto("/pt", { waitUntil: "networkidle" });
+      if (theme !== "warm") {
+        await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+      }
       const { violations } = await new AxeBuilder({ page }).analyze();
       expect(
         violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(" | ")}`),
@@ -25,6 +28,9 @@ test.describe("/pt fit and finish", () => {
         await seedTheme(page, theme);
         await page.setViewportSize({ width, height: 800 });
         await page.goto("/pt", { waitUntil: "networkidle" });
+        if (theme !== "warm") {
+          await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+        }
         const { scrollWidth, clientWidth } = await page.evaluate(() => ({
           scrollWidth: document.documentElement.scrollWidth,
           clientWidth: document.documentElement.clientWidth,

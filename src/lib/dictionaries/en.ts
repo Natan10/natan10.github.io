@@ -19,6 +19,7 @@ export const en: Dictionary = {
   language: { navLabel: "Language" },
   boot: {
     regionLabel: "Session boot log",
+    sessionBoot: "[SESSION BOOT: 0.0014s]",
     system:
       "[SYSTEM]: Kernel v6.8.9-x86_64 loaded. Guest privilege session established.",
     help: {

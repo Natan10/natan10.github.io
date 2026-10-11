@@ -97,6 +97,10 @@ test.describe("locale", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
     await expect(page.getByText("Macro Registers:")).toBeVisible();
     await expect(page.locator("#experience h2")).toHaveText("Experience");
+    await expect(page.locator("h1")).toHaveText("Natan Moreira — Software Engineer");
+    await expect(page.locator("#user")).toContainText("years of experience");
+    await expect(page.locator("#contact")).toContainText("Download CV");
+    expect(await page.locator("section[id]").count()).toBe(6);
   });
 
   test("[C2] /pt answers 200 with page language pt-BR and one h1 naming the owner", async ({
@@ -194,6 +198,20 @@ test.describe("content", () => {
       expect(p.description).not.toBe(en.projects[i].description);
     });
     expect(pt.takeaways).toHaveLength(en.takeaways.length);
+    expect(pt.takeaways.map((t) => t.title)).toEqual([
+      "Projete para testabilidade primeiro",
+      "Assíncrono por padrão para trabalho lento",
+      "Observe antes de supor",
+      "Automatize o pipeline",
+      "Estado de servidor não é estado global",
+    ]);
+    expect(en.takeaways.map((t) => t.title)).toEqual([
+      "Design for testability first",
+      "Async by default for slow work",
+      "Observe before you guess",
+      "Automate the pipeline",
+      "Server state is not global state",
+    ]);
     pt.takeaways.forEach((t, i) => {
       expect(t.title).not.toBe(en.takeaways[i].title);
       expect(t.detail).not.toBe(en.takeaways[i].detail);
@@ -305,6 +323,22 @@ test.describe("interface text", () => {
     for (const [key, value] of english) {
       expect(shown, key).not.toContain(value);
     }
+    // Short labels (under 3 words, so skipped above) are checked against the
+    // elements the dictionary controls: accessible names, headings, terms, buttons.
+    const surfaces = await page.evaluate(() => [
+      ...[...document.querySelectorAll("[aria-label]")].map((el) => el.getAttribute("aria-label") ?? ""),
+      ...[...document.querySelectorAll("h2, dt, button, label, #user [aria-label] + p")].map(
+        (el) => el.textContent?.trim() ?? "",
+      ),
+    ]);
+    const shortEnglish = Object.entries(enFlat).filter(
+      ([key, value]) =>
+        value !== ptFlat[key] && !value.includes("{") && value.split(/\s+/).length < 3,
+    );
+    expect(shortEnglish.length).toBeGreaterThan(5);
+    for (const [key, value] of shortEnglish) {
+      expect(surfaces, key).not.toContain(value);
+    }
     // Labelled regions carry Portuguese names.
     await expect(page.getByRole("region", { name: "Registro de inicialização da sessão" })).toBeVisible();
     await expect(page.getByRole("log", { name: "Saída dos comandos" })).toBeAttached();
@@ -313,12 +347,23 @@ test.describe("interface text", () => {
     expect(await page.locator('ul[aria-label="Etiquetas"]').count()).toBeGreaterThan(0);
     // Terminal tokens are identical to the English page.
     const tokens = await page.evaluate(() => document.body.textContent ?? "");
-    for (const token of ["NORMAL", "UTF-8", "VIM 9.1", "BUF #1", "[RO]", "guest@portfolio:~$"]) {
+    for (const token of [
+      "NORMAL",
+      "UTF-8",
+      "VIM 9.1",
+      "BUF #1",
+      "[RO]",
+      "guest@portfolio:~$",
+      "NODE: node-01a.sfo3",
+      "BAUD: 38400 | ARCH: x86_64-retro | TERM: xterm-256color",
+    ]) {
       expect(tokens, token).toContain(token);
     }
     // Decorative phrases are translated.
     await expect(page.getByText("TERMINAL DE HARDWARE COMPATÍVEL COM VT220")).toBeVisible();
     expect(tokens).toContain("0 erros 0 avisos");
+    expect(tokens).toContain("[INICIALIZAÇÃO DA SESSÃO: 0.0014s]");
+    expect(tokens).not.toContain("SESSION BOOT");
   });
 
   test("[C15] /help on /pt lists every command with its Portuguese description", async ({
@@ -385,6 +430,20 @@ test.describe("interface text", () => {
       await expect(page.locator(`section#${id}`)).toBeInViewport();
       const lines = await outputLines(page);
       expect(lines.at(-1), id).toBe(`${text} → ${file}`);
+    }
+  });
+
+  test("[C17] the section chips on /pt print the same Portuguese result lines", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/pt", { waitUntil: "networkidle" });
+    for (const [id, text, file] of sections.filter(([id]) =>
+      ["user", "experience", "skills", "projects"].includes(id),
+    )) {
+      await page.getByRole("button", { name: new RegExp(`^\\[/${id}\\]`) }).click();
+      await expect(page.locator(`section#${id}`)).toHaveAttribute("data-highlight", "true");
+      expect((await outputLines(page)).at(-1), id).toBe(`${text} → ${file}`);
     }
   });
 
@@ -566,8 +625,9 @@ test.describe("language switch", () => {
     await expect(prompt(page)).toHaveValue("");
   });
 
-  test("[C29] the EN | PT toggle sits in the hero and is accessible", async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 800 });
+  test("[C29] the EN | PT toggle sits at the top of the hero and is accessible", async ({ page }) => {
+    for (const width of [375, 1280]) {
+    await page.setViewportSize({ width, height: 800 });
     for (const [url, active, other, name, lang] of [
       ["/", "EN", "PT", "Português", "pt-BR"],
       ["/pt", "PT", "EN", "English", "en"],
@@ -576,7 +636,14 @@ test.describe("language switch", () => {
       const hero = page.locator("main header").first();
       const toggle = hero.getByRole("navigation", { name: /^(Language|Idioma)$/ });
       await expect(toggle).toBeVisible();
-      await expect(hero.getByRole("button", { name: /^\[\/help\]/ })).toBeVisible();
+      // At the top-right of the hero card: near its top edge, and not among the chips.
+      const card = hero.locator(":scope > div").nth(1);
+      const cardBox = (await card.boundingBox())!;
+      const toggleBox = (await toggle.boundingBox())!;
+      expect(toggleBox.y - cardBox.y).toBeLessThan(80);
+      expect(cardBox.x + cardBox.width - (toggleBox.x + toggleBox.width)).toBeLessThan(80);
+      const chip = (await hero.getByRole("button", { name: /^\[\/help\]/ }).boundingBox())!;
+      expect(toggleBox.y + toggleBox.height).toBeLessThan(chip.y);
       await expect(toggle.getByRole("listitem")).toHaveText(["EN", "PT"]);
       const current = toggle.locator('[aria-current="true"]');
       await expect(current).toHaveText(active);
@@ -585,8 +652,10 @@ test.describe("language switch", () => {
       await expect(link).toHaveText(other);
       await expect(link).toHaveAttribute("lang", lang);
       await expect(toggle.getByRole("link")).toHaveCount(1);
-      expect((await current.boundingBox())!.height).toBeGreaterThanOrEqual(44);
-      expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+      if (width === 375) {
+        expect((await current.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+        expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+      }
       // Reach the link by keyboard and read its focus outline.
       let focused = false;
       for (let i = 0; i < 40 && !focused; i++) {
@@ -600,6 +669,7 @@ test.describe("language switch", () => {
       });
       expect(outline.style).not.toBe("none");
       expect(outline.width).toBeGreaterThanOrEqual(2);
+    }
     }
   });
 });
@@ -663,7 +733,8 @@ test.describe("docs", () => {
     expect(section).toContain("src/content/shared.ts");
     expect(section).toContain("src/lib/dictionaries/en.ts");
     expect(section).toContain("src/lib/dictionaries/pt.ts");
-    expect(readme).toContain("/pt");
-    expect(readme).toContain("/language");
+    expect(section).toContain("/pt");
+    expect(section).toContain("/language");
+    expect(readme).not.toMatch(/keeps the section/i);
   });
 });

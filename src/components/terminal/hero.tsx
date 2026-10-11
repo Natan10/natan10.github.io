@@ -27,10 +27,14 @@ export function Hero({
         </span>
       </div>
 
-      <div className="w-full bg-surface-container-lowest border border-outline-variant p-space-md sm:p-space-lg flex flex-col items-start overflow-x-auto">
+      <div className="w-full bg-surface-container-lowest border border-outline-variant p-space-md sm:p-space-lg flex flex-col items-start overflow-x-auto relative">
         <h1 className="sr-only">
           {site.name} — {site.title}
         </h1>
+        <LanguageToggle
+          current={language}
+          label={dict.language.navLabel}
+        />
         <pre
           aria-hidden="true"
           className="text-[8px] leading-[1.32] sm:text-body-sm sm:leading-[1.32] [font-variant-ligatures:none] text-primary whitespace-pre select-none drop-shadow-[0_0_8px_rgba(196,210,126,0.35)]"
@@ -59,10 +63,6 @@ export function Hero({
             {dict.hero.macroRegisters}
           </span>
           <MacroChips />
-          <LanguageToggle
-            current={language}
-            label={dict.language.navLabel}
-          />
         </div>
       </div>
     </header>

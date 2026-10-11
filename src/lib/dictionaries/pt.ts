@@ -19,6 +19,7 @@ export const pt: Dictionary = {
   language: { navLabel: "Idioma" },
   boot: {
     regionLabel: "Registro de inicialização da sessão",
+    sessionBoot: "[INICIALIZAÇÃO DA SESSÃO: 0.0014s]",
     system:
       "[SYSTEM]: Kernel v6.8.9-x86_64 carregado. Sessão com privilégio de convidado estabelecida.",
     help: {

@@ -17,6 +17,7 @@ export type Dictionary = {
   language: { navLabel: string };
   boot: {
     regionLabel: string;
+    sessionBoot: string;
     system: string;
     help: { before: string; after: string };
   };
