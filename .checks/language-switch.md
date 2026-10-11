@@ -80,7 +80,7 @@ Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C13\]"`
 
 ### S3 - Interface text · 9 files · 24 KB · ~6k
 
-**C14** - On `/pt` no English interface string that has a different Portuguese entry appears in the visible text or accessible names; the labelled regions carry Portuguese names; terminal tokens (`NORMAL`, `COMMAND`, `UTF-8`, `VIM 9.1`, `BUF #1`, `[RO]`, the prompt string, `NODE: node-01a.sfo3`, the `BAUD … TERM` line, the `cv` label, error codes) equal `/`; the `[SESSION BOOT: …]` line is translated
+**C14** - On `/pt` no English interface string that has a different Portuguese entry appears in the visible text or accessible names; the labelled regions carry Portuguese names; terminal tokens (`NORMAL`, `COMMAND`, `UTF-8`, `VIM 9.1`, `BUF #1`, `[RO]`, the prompt string, `NODE: node-01a.sfo3`, the `BAUD … TERM` line, `EXEC`, the `[SYSTEM]:` prefix, the `[OK]`/`[TODO]` tag, `profile.vim`, `⎇ main`, the `cv` label, error codes) equal `/`; the `[SESSION BOOT: …]` line is translated; Tab suggestions name their kinds in Portuguese (`seção`, `ação`, `sistema`); only `prompt.exec` and `sections.status` are identical in the two dictionaries
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C14\]"`
 
 **C15** - `/help` on `/pt` prints a Portuguese heading and one line per command in registry order with its Portuguese description; names and aliases (including `/language` and `:language`) are unchanged
@@ -175,6 +175,8 @@ Proof: `npm run lint && npm run build && npm test`
 Settled mid-build (2026-10-10, owner, second request): the toggle moves from beside the macro chips to the top-right corner of the hero card (the empty corner of the card, above the banner row on narrow screens). C29 was rewritten for this.
 
 Settled mid-build (2026-10-10, owner): the section being read is not carried over when switching. The toggle sits in the hero, so reaching it scrolls the visitor away from the section (verified: toggle off-screen while reading Skills; `/` scrolls to the prompt). Switching now always opens the other language at its top. C20, C21 and C23 were rewritten for this; no other check changed in meaning.
+
+Closed after verification (no change of meaning): Tab suggestions printed `(section)`/`(action)`/`(system)` in English on `/pt`; they now come from the dictionary. C14's test matches placeholder entries as patterns, short entries as whole words, and pins the only two dictionary entries allowed to be identical.
 
 Corrected as factual slips, not renegotiation: C10's link text uses the real CV filename (`Baixar CV em inglês (Natanael_Moreira_Resume.pdf)`, the task said `cv.pdf`); C7 asserts location and achievements differ per entry and the `Present` → `Atual` period, since most periods are digits identical in both languages.
 

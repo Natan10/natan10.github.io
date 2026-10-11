@@ -117,7 +117,7 @@ Open, default taken:
 
 | State | What should happen | Caller sees |
 |---|---|---|
-| Hero text, chip captions, prompt placeholder and buttons, statusline, boot card | In the active language | Portuguese text on `/pt` |
+| Hero text, chip captions, the prompt's label and CLEAR button, statusline diagnostics, boot card sentences | In the active language | Portuguese text on `/pt` |
 | `/help` | Lists every command with its description in the active language; names unchanged (Key decision 4) | Portuguese descriptions |
 | Unknown input | The `E492` message and the hint to try `/help` in the active language | Portuguese message |
 | `:q` in-character reply, `:w` confirmation, theme messages | In the active language | Portuguese message |
