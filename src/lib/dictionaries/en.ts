@@ -43,6 +43,7 @@ export const en: Dictionary = {
     status: "status",
     photoPlaceholder: "TODO: owner photo",
     downloadCv: "Download CV ({file})",
+    spotifyPlaylist: "Spotify playlist",
     frameCounts: "{lines} lines, {bytes} bytes",
   },
   terminal: {

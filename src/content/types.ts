@@ -35,6 +35,15 @@ export type ContactEntry = { label: string; value: string; href: string };
 
 export type Takeaway = { title: string; detail: string };
 
+/** The public Spotify playlist; both URLs derive from its id. */
+export type Playlist = {
+  id: string;
+  /** Public page, opened by plain links. */
+  url: string;
+  /** Embed iframe source, dark theme. */
+  embedUrl: string;
+};
+
 export type Content = {
   profile: Profile;
   experience: readonly Experience[];
@@ -44,4 +53,5 @@ export type Content = {
   takeaways: readonly Takeaway[];
   /** Public URL of the CV file. */
   cv: { href: string; filename: string };
+  playlist: Playlist;
 };

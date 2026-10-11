@@ -31,3 +31,7 @@ export const noCommand: Dictionary["commands"] = {} as Without<Dictionary["comma
 export const noResult: Dictionary["commands"]["/skills"] = {} as Without<Dictionary["commands"]["/skills"], "result">;
 // @ts-expect-error chip command without a caption
 export const noChip: Dictionary["commands"]["/help"] = {} as Without<Dictionary["commands"]["/help"], "chip">;
+
+// The Spotify playlist link label is required in every dictionary.
+// @ts-expect-error missing playlist link label
+export const noPlaylistLabel: Dictionary["sections"] = {} as Without<Dictionary["sections"], "spotifyPlaylist">;

@@ -155,7 +155,7 @@ export function Takeaways({ content, dict }: Props) {
 }
 
 export function Contact({ content, dict }: Props) {
-  const { contact, cv } = content;
+  const { contact, cv, playlist } = content;
   return (
     <SectionFrame
       id="contact"
@@ -188,6 +188,14 @@ export function Contact({ content, dict }: Props) {
           </a>
         </li>
       </ul>
+      <p className="mt-space-xs text-body-md">
+        <a
+          href={playlist.url}
+          className="text-secondary underline break-all focus-visible:outline-2 focus-visible:outline-primary"
+        >
+          {dict.sections.spotifyPlaylist}
+        </a>
+      </p>
     </SectionFrame>
   );
 }

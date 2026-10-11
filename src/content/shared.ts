@@ -111,4 +111,7 @@ export const shared = {
     { id: "server-state" },
   ],
   cv: { href: "/cv.pdf", filename: "Natanael_Moreira_Resume.pdf" },
+  // The owner's public Spotify playlist, stored once as an id: the public URL
+  // and the embed URL are derived from it (see `getContent`).
+  music: { playlistId: "4lrm0AHTGIV9BH77rG8qVt" },
 } as const;

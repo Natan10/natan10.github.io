@@ -36,6 +36,7 @@ export type Dictionary = {
     status: string;
     photoPlaceholder: string;
     downloadCv: string;
+    spotifyPlaylist: string;
     frameCounts: string;
   };
   terminal: {
