@@ -309,11 +309,11 @@ test.describe("dictionary parity for the music strings", () => {
     }
     for (const dict of [en, pt]) {
       expect(dict.music.opened).toContain("♪");
-      expect(dict.music.opened).toContain('"Natan Profile"');
+      expect(dict.music.opened).toContain('"{name}"');
       expect(dict.music.opened).toContain("{url}");
       expect(dict.music.alreadyOpen).toContain("/music off");
       expect(dict.music.usage).toContain("/music | /music off");
-      expect(dict.music.iframeTitle).toContain("Natan Profile");
+      expect(dict.music.iframeTitle).toContain("{name}");
     }
   });
 });

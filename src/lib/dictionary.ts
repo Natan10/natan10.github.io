@@ -58,7 +58,10 @@ export type Dictionary = {
     /** Kind words printed beside Tab suggestions, e.g. `/user (section)`. */
     kinds: Record<CommandKind, string>;
   };
-  /** The `/music` command's output lines and the player strip's labels. */
+  /**
+   * The `/music` command's output lines and the player strip's labels. `opened`
+   * and `iframeTitle` take `{name}` (the playlist's name, from the content).
+   */
   music: {
     opened: string;
     alreadyOpen: string;

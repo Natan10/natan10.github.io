@@ -20,7 +20,7 @@ export function Home({ language }: { language: Language }) {
           <BufferWindow content={content} dict={dict} />
         </div>
       </PageBody>
-      <MusicStrip playlist={content.playlist} />
+      <MusicStrip />
       <Statusline />
     </TerminalProvider>
   );

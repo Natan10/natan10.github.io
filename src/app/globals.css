@@ -94,6 +94,19 @@
   --spacing-space-lg: 1.5rem;
   --spacing-space-xl: 2.5rem;
 
+  /* The music player strip (docs/specs/music-player.md): one place for the
+     sizes the strip, the page padding and the statusline all depend on. */
+  --spacing-statusline: 2rem;
+  --spacing-music-embed: 5rem;
+  --spacing-music-strip: 6.75rem;
+
+  /* docs/design.md "Floating Windows": flat, un-blurred 4px offset in #000000,
+     mirrored upward for a window docked to the bottom edge. */
+  --shadow-flat-up: 4px -4px 0 0 #000000;
+
+  /* Spotify's own dark embed background, so the corners the embed paints blend in. */
+  --color-embed-surface: #1f1f1f;
+
   --animate-blink: blink 1s step-end infinite;
 
   @keyframes blink {

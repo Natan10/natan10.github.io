@@ -53,10 +53,22 @@ export const commands: readonly Command[] = registry;
 
 export const chipCommands = commands.filter((c) => c.chip);
 
-/** Case-insensitive, whitespace-trimmed; the first word is the command name. */
-export function parse(input: string): { name: string; args: string[] } {
-  const [name = "", ...args] = input.trim().toLowerCase().split(/\s+/);
-  return { name, args };
+/**
+ * Case-insensitive, whitespace-trimmed; the first word is the command name.
+ * `args` is lowercased for matching, `rawArgs` keeps what was typed so errors
+ * can echo it back unchanged.
+ */
+export function parse(input: string): {
+  name: string;
+  args: string[];
+  rawArgs: string[];
+} {
+  const [rawName = "", ...rawArgs] = input.trim().split(/\s+/);
+  return {
+    name: rawName.toLowerCase(),
+    args: rawArgs.map((a) => a.toLowerCase()),
+    rawArgs,
+  };
 }
 
 export function find(name: string): Command | undefined {

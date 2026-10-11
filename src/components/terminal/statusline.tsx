@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { isEditable } from "@/lib/keyboard";
+import { MUSIC_STATUS_LABEL } from "@/lib/music";
 import { useTerminal } from "./terminal-provider";
 
 const LINE_HEIGHT = 22;
@@ -75,7 +76,7 @@ export function Statusline() {
   return (
     <footer
       aria-hidden="true"
-      className="fixed bottom-0 left-0 right-0 z-50 h-8 bg-surface-container-lowest border-t border-outline-variant px-margin-mobile md:px-margin flex items-center justify-between gap-space-md text-label-md"
+      className="fixed bottom-0 left-0 right-0 z-50 h-statusline bg-surface-container-lowest border-t border-outline-variant px-margin-mobile md:px-margin flex items-center justify-between gap-space-md text-label-md"
     >
       <div className="flex items-center gap-space-md min-w-0">
         <span
@@ -91,7 +92,7 @@ export function Statusline() {
           {dict.statusline.diagnostics}
         </span>
         {musicOpen && (
-          <span className="shrink-0 whitespace-nowrap text-tertiary">♪ music</span>
+          <span className="shrink-0 whitespace-nowrap text-tertiary">{MUSIC_STATUS_LABEL}</span>
         )}
       </div>
       <span data-testid="position" className="text-on-surface-variant shrink-0">

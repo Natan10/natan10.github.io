@@ -65,7 +65,7 @@ export const en: Dictionary = {
     kinds: { section: "section", action: "action", system: "system" },
   },
   music: {
-    opened: '♪ opening playlist "Natan Profile": press play. Fallback: {url}',
+    opened: '♪ opening playlist "{name}": press play. Fallback: {url}',
     alreadyOpen: "music player already open: /music off to close",
     closed: "music player closed",
     notOpen: "music player is not open",
@@ -73,7 +73,7 @@ export const en: Dictionary = {
     usage: "usage: /music | /music off",
     openLink: "open in Spotify ↗",
     closeName: "Close music player",
-    iframeTitle: "Spotify playlist: Natan Profile",
+    iframeTitle: "Spotify playlist: {name}",
     landmark: "Music player",
     embedError: "Spotify could not be loaded. Use the link above to open the playlist.",
   },

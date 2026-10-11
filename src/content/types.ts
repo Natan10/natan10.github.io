@@ -38,6 +38,8 @@ export type Takeaway = { title: string; detail: string };
 /** The public Spotify playlist; both URLs derive from its id. */
 export type Playlist = {
   id: string;
+  /** Display name, shown in the strip header, the output line and the iframe title. */
+  name: string;
   /** Public page, opened by plain links. */
   url: string;
   /** Embed iframe source, dark theme. */

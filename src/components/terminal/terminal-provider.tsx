@@ -40,11 +40,24 @@ type Terminal = {
   print: (lines: readonly string[]) => void;
   /** Whether the music player strip is open; the one source of truth. */
   musicOpen: boolean;
-  /** Closes the player strip (removing the embed) and prints the result. */
-  closeMusic: () => void;
+  /** The public playlist the player opens; shared so the strip needs no props. */
+  playlist: Content["playlist"];
+  /**
+   * Closes the player strip (removing the embed) and prints the result. With
+   * `restoreFocus` the prompt takes focus: a keyboard user who pressed `[x]`
+   * would otherwise lose it when the button unmounts.
+   */
+  closeMusic: (options?: MusicOptions) => void;
   language: Language;
   dict: Dictionary;
 };
+
+type EchoLine = Omit<LogLine, "id">;
+
+type MusicOptions = { echo?: EchoLine; restoreFocus?: boolean };
+
+/** Id of the prompt input (see `Prompt`). */
+const PROMPT_ID = "command-prompt";
 
 const TerminalContext = createContext<Terminal | null>(null);
 
@@ -106,17 +119,42 @@ export function TerminalProvider({
     [append],
   );
 
-  const closeMusic = useCallback(() => {
-    setMusicOpen(false);
-    print([dict.music.closed]);
-  }, [print, dict]);
+  // The single place the player opens and closes; `echo` is the typed command.
+  const openMusic = useCallback(
+    (echo?: EchoLine) => {
+      const m = dict.music;
+      if (musicOpen) {
+        append([...(echo ? [echo] : []), { kind: "out", text: m.alreadyOpen }]);
+        return;
+      }
+      setMusicOpen(true);
+      append([
+        ...(echo ? [echo] : []),
+        { kind: "out", text: fill(m.opened, { url: playlist.url, name: playlist.name }) },
+      ]);
+    },
+    [append, dict, musicOpen, playlist],
+  );
+
+  const closeMusic = useCallback(
+    ({ echo, restoreFocus }: MusicOptions = {}) => {
+      const m = dict.music;
+      setMusicOpen(false);
+      append([
+        ...(echo ? [echo] : []),
+        { kind: "out", text: musicOpen ? m.closed : m.notOpen },
+      ]);
+      if (restoreFocus) document.getElementById(PROMPT_ID)?.focus();
+    },
+    [append, dict, musicOpen],
+  );
 
   const run = useCallback(
     (input: string) => {
       const trimmed = input.trim();
       if (!trimmed) return;
       setHistory((prev) => [...prev, trimmed]);
-      const { name, args } = parse(trimmed);
+      const { name, args, rawArgs } = parse(trimmed);
       const command = find(name);
       const echo = { kind: "cmd" as const, text: trimmed };
       const t = dict.terminal;
@@ -157,19 +195,16 @@ export function TerminalProvider({
           const m = dict.music;
           const arg = args[0];
           if (arg === undefined) {
-            if (musicOpen) {
-              append([echo, { kind: "out", text: m.alreadyOpen }]);
-            } else {
-              setMusicOpen(true);
-              append([echo, { kind: "out", text: fill(m.opened, { url: playlist.url }) }]);
-            }
+            openMusic(echo);
           } else if (arg === "off" && args.length === 1) {
-            setMusicOpen(false);
-            append([echo, { kind: "out", text: musicOpen ? m.closed : m.notOpen }]);
+            closeMusic({ echo });
           } else {
+            // Name the offending token as typed: the first argument, unless it
+            // is a valid "off" followed by something extra.
+            const offending = arg === "off" ? rawArgs[1] : rawArgs[0];
             append([
               echo,
-              { kind: "err", text: fill(m.unknownArgument, { arg }) },
+              { kind: "err", text: fill(m.unknownArgument, { arg: offending }) },
               { kind: "out", text: m.usage },
             ]);
           }
@@ -231,12 +266,22 @@ export function TerminalProvider({
         append([echo, { kind: "out", text: texts.result }]);
       }
     },
-    [append, theme, language, dict, cv, playlist, musicOpen],
+    [append, theme, language, dict, cv, openMusic, closeMusic],
   );
 
   return (
     <TerminalContext
-      value={{ log, history, run, print, musicOpen, closeMusic, language, dict }}
+      value={{
+        log,
+        history,
+        run,
+        print,
+        musicOpen,
+        playlist,
+        closeMusic,
+        language,
+        dict,
+      }}
     >
       {children}
     </TerminalContext>

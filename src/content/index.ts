@@ -6,9 +6,10 @@ import { shared } from "./shared";
 import type { ContentText } from "./text";
 
 /** Both URLs derive from the id; the `?si=` share token is deliberately absent. */
-function playlistFrom(id: string): Playlist {
+function playlistFrom(id: string, name: string): Playlist {
   return {
     id,
+    name,
     url: `https://open.spotify.com/playlist/${id}`,
     embedUrl: `https://open.spotify.com/embed/playlist/${id}?theme=0`,
   };
@@ -49,6 +50,6 @@ export function getContent(language: Language): Content {
     contact: shared.contact,
     takeaways: shared.takeaways.map((t) => text.takeaways[t.id]),
     cv: shared.cv,
-    playlist: playlistFrom(shared.music.playlistId),
+    playlist: playlistFrom(shared.music.playlistId, shared.music.playlistName),
   };
 }
