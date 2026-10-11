@@ -41,7 +41,7 @@ Unchanged: the root route stays English at its current address, so every existin
 
 ## Shape
 
-The language is the route: English at `/` and Portuguese at `/pt`, each rendered completely at build time with its own page language attribute, and neither resolved on the client. All visible text comes from one active language, split into the personal content and the interface text, and a missing Portuguese entry fails the build. Switching language is a plain navigation to the other route, triggered from a visible control or a new `/language` command; it carries nothing over except the section the visitor is on. The heavier alternative - every language under its own prefix (`/en`, `/pt`) with a redirect from `/` by `Accept-Language` - wins only if a third language or automatic detection is wanted, and neither is.
+The language is the route: English at `/` and Portuguese at `/pt`, each rendered completely at build time with its own page language attribute, and neither resolved on the client. All visible text comes from one active language, split into the personal content and the interface text, and a missing Portuguese entry fails the build. Switching language is a plain navigation to the other route, triggered from a visible control or a new `/language` command; it carries nothing over; the other language opens at its top. The heavier alternative - every language under its own prefix (`/en`, `/pt`) with a redirect from `/` by `Accept-Language` - wins only if a third language or automatic detection is wanted, and neither is.
 
 ## Key decisions
 
@@ -50,7 +50,7 @@ The language is the route: English at `/` and Portuguese at `/pt`, each rendered
 3. **Content parity is enforced by the types, and language-independent values are stated once.** Every translatable field exists in both languages and a missing one is a build error. Skill levels, stacks, links, company and project names, stars and contact values are not translatable and are stated once, so the two pages cannot disagree on them or on how many entries each section has. English stays the source and the Portuguese is a translation of it.
 4. **Identifiers and proper nouns are never translated.** Command names (`/user`, `/help`, `:theme`, `:w`, `:q`, `:c`), the new `/language`, theme names, section ids, company names, technology names, the ASCII banner and the owner's name stay as they are. Commands accepted at the prompt are the same on both pages.
 5. **No literal English string may remain on the Portuguese page.** Every other visible string - labels, hints, `/help` descriptions, the `E492`-style messages, accessible names, the page title, description and social preview - comes from the active language. This is checkable by a test that loads `/pt` and fails on a list of known English sentences.
-6. **Switching language is a navigation and resets the page.** The output stream, prompt history and statusline position start fresh; the theme survives because it is stored separately. Position is kept only as the section anchor, which is identical on both pages.
+6. **Switching language is a navigation and resets the page.** The output stream, prompt history and scroll position start fresh, so the other language opens at its top; the theme survives because it is stored separately. A section anchor was dropped (owner, 2026-10-10): the toggle sits in the hero, so reaching it scrolls the visitor away from the section being read.
 7. **Portuguese means Brazilian Portuguese (`pt-BR`)**, in the page's language attribute, the metadata and the wording.
 
 ## Work
@@ -60,7 +60,7 @@ The language is the route: English at `/` and Portuguese at `/pt`, each rendered
 | [Locale](#locale) | `/` in English and `/pt` in Portuguese render the same page, each with its own page language attribute | clear |
 | [Content](#content) | Every profile, experience, skill, project, contact and takeaway field exists in both languages, type-checked | open — 1 default taken |
 | [Interface Text](#interface-text) | Labels, hints, `/help` descriptions, error messages and accessible names come from the active language | clear |
-| [Language Switch](#language-switch) | A visible control and `/language` move the visitor to the other route, on the section they were reading | open — 1 default taken |
+| [Language Switch](#language-switch) | A visible control and `/language` move the visitor to the other route, at its top | open — 1 default taken |
 | [Metadata](#metadata) | Page title, description, social preview and language alternates exist per language | clear |
 
 Order: Locale → Content → Interface Text → Language Switch → Metadata.
@@ -130,8 +130,8 @@ Open, default taken:
 
 | State | What should happen | Caller sees |
 |---|---|---|
-| Click the toggle on `/` | Go to `/pt`, on the same section | Portuguese page |
-| Click the toggle on `/pt` | Go to `/`, on the same section | English page |
+| Click the toggle on `/` | Go to `/pt`, at its top | Portuguese page |
+| Click the toggle on `/pt` | Go to `/`, at its top | English page |
 | `/language pt` on `/` | Same as the toggle; no echo, because the page resets (Key decision 6) | Portuguese page |
 | `/language en` on `/pt` | Same as the toggle | English page |
 | `/language` | Lists `en | pt` and the active one | output lines |

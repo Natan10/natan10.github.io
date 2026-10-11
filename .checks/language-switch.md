@@ -57,7 +57,7 @@ Proof: `npx playwright test tests/e2e/accessibility.spec.ts tests/e2e/command-pr
 **C6** - On `/pt` the identity section shows Portuguese bio, location and availability; name and tags equal `/`; the job title is `Software Engineer`; the bio contains no gendered adjective from a fixed list (`apaixonado`, `apaixonada`, `comprometido`, `comprometida`, `dedicado`, `dedicada`, `motivado`, `motivada`)
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C6\]"`
 
-**C7** - On `/pt` the experience section has the same number of entries, order, companies, stack chips, roles and achievements-per-entry as `/`, and its period, location and achievements text differ from `/`
+**C7** - On `/pt` the experience section has the same number of entries, order, companies, stack chips, roles and achievements-per-entry as `/`; each entry's location and achievements text differ from `/`, and the current role's period reads `07/2025 – Atual`
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C7\]"`
 
 **C8** - On `/pt` skills have the same labels, order and bars as `/`, and the group headings read `Frontend, Backend, Dados, Cloud, Práticas, IA`
@@ -66,7 +66,7 @@ Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C8\]"`
 **C9** - On `/pt` projects have the same names, links, stacks and stars as `/` with different descriptions; takeaways have the same count and order with different text; contact entries equal `/`
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C9\]"`
 
-**C10** - On `/pt` the CV link has the same `href` and `download` as on `/` and reads `Baixar CV em inglês (cv.pdf)`
+**C10** - On `/pt` the CV link has the same `href` and `download` as on `/` and reads `Baixar CV em inglês (Natanael_Moreira_Resume.pdf)`
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C10\]"`
 
 **C11** - On `/pt` each section frame's `{lines}L, {bytes}B` counter equals the line count and UTF-8 byte length of that section's text, with accented letters as 2 bytes
@@ -100,16 +100,16 @@ Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C19\]"`
 
 ### S4 - Language switch · 6 files · 14 KB · ~4k
 
-**C20** - Switching from `/` with the skills frame top at or above the viewport top and the projects frame below goes to `/pt#skills` with skills in view; from `/pt` the EN item goes to `/#skills`
+**C20** - Switching with the toggle while reading the skills section opens the other language at its top: the URL is `/pt` (or `/`) with no fragment and the page is scrolled to the top, in both directions
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C20\]"`
 
-**C21** - Switching from the top of `/` goes to `/pt` with no fragment
+**C21** - With JavaScript on, the toggle link's `href` is exactly `/pt` on `/` and `/` on `/pt`
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C21\]"`
 
 **C22** - With JavaScript disabled the other item is a link to `/pt` (or `/`) with no fragment and following it loads that page
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C22\]"`
 
-**C23** - `/language pt` and `:language pt` on `/` go to `/pt` by the C20/C21 rule; `/language en` and `:language en` on `/pt` go to `/`
+**C23** - `/language pt` and `:language pt` on `/` go to `/pt`; `/language en` and `:language en` on `/pt` go to `/`, with no fragment
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C23\]"`
 
 **C24** - `/language` with no argument lists `en | pt` and names the active language, in the active language
@@ -171,5 +171,10 @@ Proof: `npm run lint && npm run build && npm test`
 - observability: not in scope - no analytics exist and none is added now
 
 ## Handoff
+
+Settled mid-build (2026-10-10, owner): the section being read is not carried over when switching. The toggle sits in the hero, so reaching it scrolls the visitor away from the section (verified: toggle off-screen while reading Skills; `/` scrolls to the prompt). Switching now always opens the other language at its top. C20, C21 and C23 were rewritten for this; no other check changed in meaning.
+
+Corrected as factual slips, not renegotiation: C10's link text uses the real CV filename (`Baixar CV em inglês (Natanael_Moreira_Resume.pdf)`, the task said `cv.pdf`); C7 asserts location and achievements differ per entry and the `Present` → `Atual` period, since most periods are digits identical in both languages.
+
 
 Batch: S1-S6 = 1 + 5 + 6 + 4 + 1 + 5 = about 22k tokens of reading, all in one app of 40 files, so one batch and no handoff. Surface changes are inside the same modules (routes, content, terminal components), so there is no cheaper boundary.

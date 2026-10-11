@@ -8,7 +8,7 @@
 
 Today the page exists in English only. Recruiters from other countries read English, and the owner confirmed that is what they use. Brazilian recruiters and companies, where the owner's last three employers are, have to read a terminal-style page in their second language or ask the owner for a Portuguese version. Nothing is measured: the site is not deployed, so there are no visitor figures and nothing is instrumented.
 
-After this ships, the same page exists in Brazilian Portuguese at `/pt`, and English stays at `/`. A visitor switches with a toggle in the hero or the `/language` command, and a Portuguese link can be shared and always opens in Portuguese. Content and labels switch; command names stay in English. Source: `.design/language-switch.md` (draft, decision committed by the owner, 2026-10-10).
+After this ships, the same page exists in Brazilian Portuguese at `/pt`, and English stays at `/`. A visitor switches with a toggle in the hero or the `/language` command; the other language opens at its top. A Portuguese link can be shared and always opens in Portuguese. Content and labels switch; command names stay in English. Source: `.design/language-switch.md` (draft, decision committed by the owner, 2026-10-10).
 
 37 criteria in 6 slices · 4 one-way doors · 1 unresolved: 0 block, 1 blocks go-live, 0 open
 
@@ -25,10 +25,10 @@ After this ships, the same page exists in Brazilian Portuguese at `/pt`, and Eng
 ### Content
 
 6. When `/pt` is read, then the identity section shows the Portuguese bio, location and availability text; the name and the tags are identical to `/`; the job title stays in English (`Software Engineer`); the bio uses gender-neutral wording and no gendered adjectives (for example a noun phrase instead of "apaixonado" or "apaixonada").
-7. When `/pt` is read, then the experience section has the same number of entries as `/`, in the same order, with the same companies and stack chips; each entry has the same number of achievements as on `/`; period, location and achievements are Portuguese text written verb-first in the present tense with the subject implied, as the English is; the role stays in English (for example `Senior Frontend Engineer`).
+7. When `/pt` is read, then the experience section has the same number of entries as `/`, in the same order, with the same companies and stack chips; each entry has the same number of achievements as on `/`; location and achievements are Portuguese text written verb-first with the subject implied, in the present tense for the current role and the past tense for earlier ones, as the English is; the current role's period reads `07/2025 – Atual`; the role stays in English (for example `Senior Frontend Engineer`).
 8. When `/pt` is read, then the skills section lists the same labels in the same order with the same bars and percentages as `/`; the group headings read `Frontend`, `Backend`, `Dados`, `Cloud`, `Práticas`, `IA`.
 9. When `/pt` is read, then the projects have the same names, links, stacks and stars as `/`, with Portuguese descriptions; the takeaways have the same count and order as `/`, with Portuguese titles and details; the contact entries have the same labels, values and links as `/`.
-10. When `/pt` is read, then the CV link in contact has the same `href` and `download` name as on `/` and its text is `Baixar CV em inglês (cv.pdf)`.
+10. When `/pt` is read, then the CV link in contact has the same `href` and `download` name as on `/` and its text is `Baixar CV em inglês (Natanael_Moreira_Resume.pdf)`.
 11. Always, the byte counter of each section frame on `/pt` equals the UTF-8 byte length of that section's lines (an accented letter counts as 2 bytes), and its line counter equals the number of those lines.
 12. If a translatable Portuguese field is missing, then `npm run build` fails with a type error.
 13. Always, values that are not translatable (skill levels, stacks, links, company and project names, stars, contact values) are identical on `/` and `/pt`.
@@ -44,10 +44,10 @@ After this ships, the same page exists in Brazilian Portuguese at `/pt`, and Eng
 
 ### Language switch
 
-20. Given `/` scrolled so that the top edge of the skills frame is at or above the top of the viewport and the projects frame is below it, when the PT item is clicked, then the URL becomes `/pt#skills` and the skills frame is in the viewport; from `/pt` the EN item gives `/#skills`.
-21. Given `/` is at the top of the page (above every section frame), when the PT item is clicked, then the URL is `/pt` with no fragment.
+20. Given `/` scrolled to the skills section, when the PT item is clicked, then the URL becomes `/pt` with no fragment and the page is scrolled to the top; from `/pt` the EN item gives `/` the same way.
+21. With JavaScript on, the toggle link's `href` is exactly `/pt` on `/` and `/` on `/pt`.
 22. While JavaScript is disabled, the other language's item is a link to `/pt` (or `/`) with no fragment, and following it loads that page.
-23. When `/language pt` (or `:language pt`) runs on `/`, then the page navigates to `/pt` by the same section rule as 20 and 21; when `/language en` (or `:language en`) runs on `/pt`, then it navigates to `/`.
+23. When `/language pt` (or `:language pt`) runs on `/`, then the page navigates to `/pt`; when `/language en` (or `:language en`) runs on `/pt`, then it navigates to `/`; neither adds a fragment.
 24. When `/language` runs with no argument, then the output lists `en | pt` and names the active language, as `:theme` does (`themes: …` / `active: …`), in the active language.
 25. If `/language xx` runs, then the output prints `E474:` followed by an unknown-language message and the valid options `en | pt`, in the active language; the page does not navigate.
 26. When `/language` names the language already active, then the output says it is already active and the URL does not change.
