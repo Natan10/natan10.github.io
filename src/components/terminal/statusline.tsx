@@ -20,7 +20,7 @@ function readPosition(): Position {
 }
 
 export function Statusline() {
-  const { dict } = useTerminal();
+  const { dict, musicOpen } = useTerminal();
   const [command, setCommand] = useState(false);
   const [pos, setPos] = useState<Position>({ line: 1, percent: 0 });
   const lastG = useRef(0);
@@ -90,6 +90,9 @@ export function Statusline() {
         <span className="hidden md:inline text-primary-container">
           {dict.statusline.diagnostics}
         </span>
+        {musicOpen && (
+          <span className="shrink-0 whitespace-nowrap text-tertiary">♪ music</span>
+        )}
       </div>
       <span data-testid="position" className="text-on-surface-variant shrink-0">
         {pos.line}:1 {pos.percent}%
