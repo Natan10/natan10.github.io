@@ -64,6 +64,18 @@ export const en: Dictionary = {
     languageAlready: "Already using {language}",
     kinds: { section: "section", action: "action", system: "system" },
   },
+  music: {
+    opened: '♪ opening playlist "Natan Profile": press play. Fallback: {url}',
+    alreadyOpen: "music player already open: /music off to close",
+    closed: "music player closed",
+    notOpen: "music player is not open",
+    unknownArgument: "unknown argument: {arg}",
+    usage: "usage: /music | /music off",
+    openLink: "open in Spotify ↗",
+    closeName: "Close music player",
+    iframeTitle: "Spotify playlist: Natan Profile",
+    landmark: "Music player",
+  },
   commands: {
     "/user": {
       description: "Show the identity summary",
@@ -104,6 +116,10 @@ export const en: Dictionary = {
     "/clear": {
       description: "Reset the output to the boot card",
       chip: "reset",
+    },
+    "/music": {
+      description: "open the Spotify playlist player",
+      chip: "playlist",
     },
     ":w": { description: "Download the CV" },
     ":q": { description: "Try to quit (good luck)" },

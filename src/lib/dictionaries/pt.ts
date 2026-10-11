@@ -64,6 +64,18 @@ export const pt: Dictionary = {
     languageAlready: "Já está em {language}",
     kinds: { section: "seção", action: "ação", system: "sistema" },
   },
+  music: {
+    opened: '♪ abrindo a playlist "Natan Profile": aperte play. Alternativa: {url}',
+    alreadyOpen: "player de música já aberto: /music off para fechar",
+    closed: "player de música fechado",
+    notOpen: "o player de música não está aberto",
+    unknownArgument: "argumento desconhecido: {arg}",
+    usage: "uso: /music | /music off",
+    openLink: "abrir no Spotify ↗",
+    closeName: "Fechar player de música",
+    iframeTitle: "Playlist do Spotify: Natan Profile",
+    landmark: "Player de música",
+  },
   commands: {
     "/user": {
       description: "Mostrar o resumo de identidade",
@@ -104,6 +116,10 @@ export const pt: Dictionary = {
     "/clear": {
       description: "Reiniciar a saída para o cartão de inicialização",
       chip: "limpar",
+    },
+    "/music": {
+      description: "abrir o player da playlist do Spotify",
+      chip: "músicas",
     },
     ":w": { description: "Baixar o CV" },
     ":q": { description: "Tentar sair (boa sorte)" },

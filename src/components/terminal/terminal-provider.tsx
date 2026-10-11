@@ -38,6 +38,10 @@ type Terminal = {
   history: readonly string[];
   run: (input: string) => void;
   print: (lines: readonly string[]) => void;
+  /** Whether the music player strip is open; the one source of truth. */
+  musicOpen: boolean;
+  /** Closes the player strip (removing the embed) and prints the result. */
+  closeMusic: () => void;
   language: Language;
   dict: Dictionary;
 };
@@ -75,14 +79,17 @@ export function TerminalProvider({
   language,
   dict,
   cv,
+  playlist,
 }: {
   children: ReactNode;
   language: Language;
   dict: Dictionary;
   cv: Content["cv"];
+  playlist: Content["playlist"];
 }) {
   const [log, setLog] = useState<LogLine[]>([]);
   const [history, setHistory] = useState<string[]>([]);
+  const [musicOpen, setMusicOpen] = useState(false);
   const nextId = useRef(0);
   const theme = useSyncExternalStore(subscribeTheme, getTheme, getServerTheme);
 
@@ -98,6 +105,11 @@ export function TerminalProvider({
       append(lines.map((text) => ({ kind: "out" as const, text }))),
     [append],
   );
+
+  const closeMusic = useCallback(() => {
+    setMusicOpen(false);
+    print([dict.music.closed]);
+  }, [print, dict]);
 
   const run = useCallback(
     (input: string) => {
@@ -141,6 +153,28 @@ export function TerminalProvider({
         case ":q":
           append([echo, { kind: "err", text: t.quit }]);
           return;
+        case "/music": {
+          const m = dict.music;
+          const arg = args[0];
+          if (arg === undefined) {
+            if (musicOpen) {
+              append([echo, { kind: "out", text: m.alreadyOpen }]);
+            } else {
+              setMusicOpen(true);
+              append([echo, { kind: "out", text: fill(m.opened, { url: playlist.url }) }]);
+            }
+          } else if (arg === "off" && args.length === 1) {
+            setMusicOpen(false);
+            append([echo, { kind: "out", text: musicOpen ? m.closed : m.notOpen }]);
+          } else {
+            append([
+              echo,
+              { kind: "err", text: fill(m.unknownArgument, { arg }) },
+              { kind: "out", text: m.usage },
+            ]);
+          }
+          return;
+        }
         case ":theme": {
           const wanted = args[0];
           const valid = THEME_NAMES.join(" | ");
@@ -197,11 +231,13 @@ export function TerminalProvider({
         append([echo, { kind: "out", text: texts.result }]);
       }
     },
-    [append, theme, language, dict, cv],
+    [append, theme, language, dict, cv, playlist, musicOpen],
   );
 
   return (
-    <TerminalContext value={{ log, history, run, print, language, dict }}>
+    <TerminalContext
+      value={{ log, history, run, print, musicOpen, closeMusic, language, dict }}
+    >
       {children}
     </TerminalContext>
   );

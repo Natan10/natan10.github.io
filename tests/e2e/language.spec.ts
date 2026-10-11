@@ -425,7 +425,7 @@ test.describe("interface text", () => {
     expect(lines[0]).toContain("/help");
     expect(lines[1]).toBe("Comandos disponíveis:");
     const commandLines = lines.slice(2);
-    expect(commandLines).toHaveLength(12);
+    expect(commandLines).toHaveLength(13);
     const expected: [string, string][] = [
       ["/user", "Mostrar o resumo de identidade"],
       ["/experience", "Mostrar a linha do tempo da experiência"],
@@ -437,6 +437,7 @@ test.describe("interface text", () => {
       ["/language, :language", "Listar ou trocar o idioma (/language [en|pt])"],
       ["/help", "Listar todos os comandos disponíveis"],
       ["/clear, :c", "Reiniciar a saída para o cartão de inicialização"],
+      ["/music, :music", "abrir o player da playlist do Spotify"],
       [":w", "Baixar o CV"],
       [":q", "Tentar sair (boa sorte)"],
     ];

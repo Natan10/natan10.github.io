@@ -24,6 +24,7 @@ const registry = [
   { name: "/language", aliases: [":language"], kind: "action" },
   { name: "/help", kind: "system", chip: {} },
   { name: "/clear", aliases: [":c"], kind: "system", chip: { danger: true } },
+  { name: "/music", aliases: [":music"], kind: "action", chip: {} },
   { name: ":w", kind: "action" },
   { name: ":q", kind: "action" },
 ] as const satisfies readonly CommandDef[];

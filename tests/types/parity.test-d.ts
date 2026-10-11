@@ -35,3 +35,9 @@ export const noChip: Dictionary["commands"]["/help"] = {} as Without<Dictionary[
 // The Spotify playlist link label is required in every dictionary.
 // @ts-expect-error missing playlist link label
 export const noPlaylistLabel: Dictionary["sections"] = {} as Without<Dictionary["sections"], "spotifyPlaylist">;
+
+// The music player's texts: the output lines, and the command's description and chip caption.
+// @ts-expect-error missing music player text
+export const noMusicText: Dictionary["music"] = {} as Without<Dictionary["music"], "alreadyOpen">;
+// @ts-expect-error music command without a chip caption
+export const noMusicChip: Dictionary["commands"]["/music"] = {} as Without<Dictionary["commands"]["/music"], "chip">;
