@@ -23,7 +23,7 @@ Personal content is split so the two languages cannot drift apart:
 - Interface text (labels, the boot card, `/help` descriptions, error messages) lives in [`src/lib/dictionaries/en.ts`](src/lib/dictionaries/en.ts) and [`src/lib/dictionaries/pt.ts`](src/lib/dictionaries/pt.ts). Command names stay in English; their descriptions are in the dictionaries.
 - Site-wide values (banner word, version) are in [`src/content/site.ts`](src/content/site.ts).
 
-Visitors switch with the `EN | PT` toggle in the hero or the `/language` command (`/language pt`, `/language en`; `:language` works too). Switching is a plain navigation to the other route and keeps the section being read.
+Visitors switch with the `EN | PT` toggle in the top-right corner of the hero or the `/language` command (`/language pt`, `/language en`; `:language` works too). Switching is a plain navigation to the other route, which opens at its top.
 
 - Photo: replace `public/avatar.jpg` (keep the alt text in `photoAlt` of each language's text).
 - CV: replace `public/cv.pdf`; the `:w` command serves it. The CV stays English on both pages.

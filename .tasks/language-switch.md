@@ -35,7 +35,7 @@ After this ships, the same page exists in Brazilian Portuguese at `/pt`, and Eng
 
 ### Interface text
 
-14. Always, on `/pt` no English interface string that has a different Portuguese entry appears in the visible text or the accessible names of the page, outside the translated content, and the page's labelled regions (`Session boot log`, `Command output`, the prompt's `Command` label, the stack and tag lists) carry Portuguese names; decorative phrases (the hero's hardware line, the boot card sentences, the diagnostics text) are translated, while terminal tokens (`NORMAL`, `COMMAND`, `UTF-8`, `VIM 9.1`, `BUF #1`, `[RO]`, the prompt string, error codes) are identical to `/`.
+14. Always, on `/pt` no English interface string that has a different Portuguese entry appears in the visible text or the accessible names of the page, outside the translated content, and the page's labelled regions (`Session boot log`, `Command output`, the prompt's `Command` label, the stack and tag lists) carry Portuguese names; decorative phrases (the hero's hardware line, the boot card sentences, the diagnostics text) are translated, while terminal tokens (`NORMAL`, `COMMAND`, `UTF-8`, `VIM 9.1`, `BUF #1`, `[RO]`, the prompt string, `NODE: node-01a.sfo3`, the `BAUD … TERM` line, the `cv` label, error codes) are identical to `/`, and the `[SESSION BOOT: …]` line is translated.
 15. When `/help` runs on `/pt`, then the output prints a Portuguese heading and one line per command in registry order, each with its Portuguese description, and the command names and aliases are unchanged (`/user`, `:theme`, `/clear`, `:c`, `:w`, `:q`, `/language` and its alias `:language`).
 16. When unknown input `foo` runs on `/pt`, then the output echoes the command, prints a Portuguese message that begins with the code `E492:` and ends with `foo`, then a Portuguese hint to try `/help`.
 17. When a section command (`/user`, `/experience`, `/skills`, `/projects`, `/contact`, `/takeaways`) runs on `/pt`, typed or from a chip, then the section scrolls into view and highlights, and the output prints that section's Portuguese result line, which keeps its pseudo-file path (for `/skills`, `~/.terminal/skills.json`).
@@ -53,7 +53,7 @@ After this ships, the same page exists in Brazilian Portuguese at `/pt`, and Eng
 26. When `/language` names the language already active, then the output says it is already active and the URL does not change.
 27. Always, a theme saved before switching is applied to the target page before first paint (`data-theme` is set on the page's root element when the page loads).
 28. When the language is switched, then the output stream shows only the boot card and the prompt history is empty on the target page.
-29. The toggle is in the hero beside the macro chips, with two items `EN` and `PT`; the active item is marked `aria-current="true"` and is not a link; the other item is a link whose accessible name is the language's own name (`English` or `Português`) with the matching `lang` attribute; at 375px width each item is at least 44px tall; keyboard focus shows a 2px outline.
+29. The toggle is in the top-right corner of the hero card, above the macro chips, with two items `EN` and `PT`; the active item is marked `aria-current="true"` and is not a link; the other item is a link whose accessible name is the language's own name (`English` or `Português`) with the matching `lang` attribute; at 375px width each item is at least 44px tall; keyboard focus shows a 2px outline.
 
 ### Metadata
 

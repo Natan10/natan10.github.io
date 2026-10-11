@@ -80,7 +80,7 @@ Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C13\]"`
 
 ### S3 - Interface text · 9 files · 24 KB · ~6k
 
-**C14** - On `/pt` no English interface string that has a different Portuguese entry appears in the visible text or accessible names; the labelled regions carry Portuguese names; terminal tokens equal `/`
+**C14** - On `/pt` no English interface string that has a different Portuguese entry appears in the visible text or accessible names; the labelled regions carry Portuguese names; terminal tokens (`NORMAL`, `COMMAND`, `UTF-8`, `VIM 9.1`, `BUF #1`, `[RO]`, the prompt string, `NODE: node-01a.sfo3`, the `BAUD … TERM` line, the `cv` label, error codes) equal `/`; the `[SESSION BOOT: …]` line is translated
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C14\]"`
 
 **C15** - `/help` on `/pt` prints a Portuguese heading and one line per command in registry order with its Portuguese description; names and aliases (including `/language` and `:language`) are unchanged
@@ -127,7 +127,7 @@ Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C27\]"`
 **C28** - After switching, the output stream shows only the boot card and prompt history is empty
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C28\]"`
 
-**C29** - The toggle is in the hero beside the macro chips with items `EN` and `PT`; the active one is `aria-current="true"` and not a link; the other is a link named `English` or `Português` with the matching `lang`; each item is at least 44px tall at 375px width; keyboard focus shows a 2px outline
+**C29** - The toggle is in the top-right corner of the hero card, above the macro chips, with items `EN` and `PT`; the active one is `aria-current="true"` and not a link; the other is a link named `English` or `Português` with the matching `lang`; each item is at least 44px tall at 375px width; keyboard focus shows a 2px outline
 Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C29\]"`
 
 ### S5 - Metadata · 4 files · 4 KB · ~1k
@@ -153,7 +153,7 @@ Proof: `npx playwright test tests/e2e/language-quality.spec.ts -g "\[C34\]"` (ta
 Proof: `npx playwright test tests/e2e/language-quality.spec.ts -g "\[C35\]"`
 
 **C36** - The README's content-editing section names where each language's content and interface text live and documents `/pt` and `/language`
-Proof: `npx playwright test tests/e2e/language-quality.spec.ts -g "\[C36\]"`
+Proof: `npx playwright test tests/e2e/language.spec.ts -g "\[C36\]"`
 
 **C37** - `npm run lint`, `npm run build` and `npm test` all pass
 Proof: `npm run lint && npm run build && npm test`
@@ -171,6 +171,8 @@ Proof: `npm run lint && npm run build && npm test`
 - observability: not in scope - no analytics exist and none is added now
 
 ## Handoff
+
+Settled mid-build (2026-10-10, owner, second request): the toggle moves from beside the macro chips to the top-right corner of the hero card (the empty corner of the card, above the banner row on narrow screens). C29 was rewritten for this.
 
 Settled mid-build (2026-10-10, owner): the section being read is not carried over when switching. The toggle sits in the hero, so reaching it scrolls the visitor away from the section (verified: toggle off-screen while reading Skills; `/` scrolls to the prompt). Switching now always opens the other language at its top. C20, C21 and C23 were rewritten for this; no other check changed in meaning.
 

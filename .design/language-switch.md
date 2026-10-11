@@ -73,7 +73,7 @@ Defaults taken, awaiting the owner:
 1. The CV download stays English on `/pt` and is labelled "CV (English)" there.
 2. Portuguese is Brazilian (`pt-BR`).
 3. Translation is written by Claude and reviewed by the owner before deploy.
-4. The visible control sits in the hero beside the macro chips, as a two-state `EN | PT` toggle, and `/language` with no argument lists the languages and the active one, as `:theme` does.
+4. The visible control sits in the top-right corner of the hero card (owner, 2026-10-10), as a two-state `EN | PT` toggle, and `/language` with no argument lists the languages and the active one, as `:theme` does.
 5. Each page is its own canonical address in search results, and each declares the other as its language alternate. (Corrected: the first draft made `/` canonical for both, which would drop `/pt` from search.)
 6. Natural-language phrases anywhere on the page, decorative terminal text included, are translated; terminal tokens (`NORMAL`, `COMMAND`, `UTF-8`, `VIM 9.1`, `BUF #1`, `[RO]`, file paths, the prompt string, and error codes such as `E492`) stay as they are.
 7. Job titles stay in English on both pages and in the page title (the owner, 2026-10-10). The Portuguese bio avoids gendered wording until the owner says which grammatical gender to use.
@@ -141,7 +141,7 @@ Open, default taken:
 | Theme set before switching | Kept after the switch | same colours |
 
 Open, default taken:
-1. Where the control sits - in the hero beside the macro chips, since the top bar was removed.
+1. Where the control sits - the top-right corner of the hero card, chosen by the owner.
 
 ### Metadata
 
