@@ -45,7 +45,7 @@ export function BufferWindow({
         id="terminal-screen"
         className="p-space-md sm:p-space-lg flex flex-col gap-space-lg min-h-80 text-body-md"
       >
-        {/* <section
+        <section
           aria-label={dict.boot.regionLabel}
           className="flex flex-col gap-space-xs text-on-surface-variant bg-surface-container-lowest p-space-md border border-outline-variant"
         >
@@ -68,7 +68,7 @@ export function BufferWindow({
               className="inline-block w-2.5 h-4 bg-primary ml-1 animate-blink"
             />
           </p>
-        </section> */}
+        </section>
         <OutputStream />
         <Identity profile={content.profile} dict={dict} />
         <Experience content={content} dict={dict} />
