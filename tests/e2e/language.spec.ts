@@ -765,6 +765,8 @@ test.describe("metadata", () => {
   }) => {
     const en = await head(page, "/");
     const pt = await head(page, "/pt");
+    expect(en.og).toBe("/opengraph-image.png");
+    expect(pt.og).toBe("/pt/opengraph-image.png");
     expect(pt.og).not.toBe(en.og);
     for (const h of [en, pt]) {
       expect(h.twitter).toBe(h.og);
