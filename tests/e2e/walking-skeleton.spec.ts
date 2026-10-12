@@ -61,18 +61,31 @@ test.describe("walking skeleton", () => {
     await page.goto("/");
     await page.evaluate(() => document.fonts.ready);
 
-    // JetBrains Mono glyphs are 0.6em wide; a fallback font for the box-drawing
-    // characters would make the widest row measurably wider or narrower.
-    const { width, fontSize, columns } = await page.evaluate(() => {
+    // Check the loaded face and the banner's glyph advances directly. A fixed
+    // em-width assumption varies with browser font rendering on CI.
+    const { family, faceLoaded, advances } = await page.evaluate(() => {
       const pre = document.querySelector("pre")!;
-      const columns = Math.max(...pre.textContent!.split("\n").map((l) => l.length));
+      const style = getComputedStyle(pre);
+      const family = style.fontFamily.split(",")[0].trim().replace(/"/g, "");
+      const faceLoaded = [...document.fonts].some(
+        (face) => face.family.replace(/"/g, "") === family && face.status === "loaded",
+      );
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d")!;
+      context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
       return {
-        width: pre.getBoundingClientRect().width,
-        fontSize: parseFloat(getComputedStyle(pre).fontSize),
-        columns,
+        family,
+        faceLoaded,
+        advances: ["M", "█", "╗", "╚", "═", "║"].map(
+          (glyph) => context.measureText(glyph).width,
+        ),
       };
     });
-    expect(width).toBeCloseTo(columns * fontSize * 0.6, 0);
+    expect(family).toMatch(/jetbrains/i);
+    expect(faceLoaded).toBe(true);
+    for (const advance of advances.slice(1)) {
+      expect(advance).toBeCloseTo(advances[0], 1);
+    }
   });
 
   test("does not shift layout while loading", async ({ page }) => {
