@@ -3,7 +3,7 @@ import { site } from "@/content/site";
 import { getDictionary } from "./dictionaries";
 import { LANGUAGE_INFO, LANGUAGES, type Language } from "./i18n";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://natan10.github.io";
 
 const title = `${site.name} — ${site.title}`;
 

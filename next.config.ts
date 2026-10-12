@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "export",
   // Without these, opening the dev server via 127.0.0.1 or a LAN IP (phone
   // testing) blocks the dev JS, so the page never hydrates and commands/buttons
   // do nothing.
