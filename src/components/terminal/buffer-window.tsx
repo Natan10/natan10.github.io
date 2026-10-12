@@ -45,30 +45,6 @@ export function BufferWindow({
         id="terminal-screen"
         className="p-space-md sm:p-space-lg flex flex-col gap-space-lg min-h-80 text-body-md"
       >
-        <section
-          aria-label={dict.boot.regionLabel}
-          className="flex flex-col gap-space-xs text-on-surface-variant bg-surface-container-lowest p-space-md border border-outline-variant"
-        >
-          <div className="flex items-center justify-between text-label-sm text-outline">
-            <span>{dict.boot.sessionBoot}</span>
-            <span>NODE: node-01a.sfo3</span>
-          </div>
-          <p className="text-primary font-bold">
-            {dict.boot.system}
-          </p>
-          <p className="text-on-surface">
-            {dict.boot.help.before}
-            <span className="text-secondary font-bold">/help</span>
-            {dict.boot.help.after}
-          </p>
-          <p className="flex items-center text-primary font-bold">
-            <span aria-hidden="true">guest@portfolio:~$</span>
-            <span
-              aria-hidden="true"
-              className="inline-block w-2.5 h-4 bg-primary ml-1 animate-blink"
-            />
-          </p>
-        </section>
         <OutputStream />
         <Identity profile={content.profile} dict={dict} />
         <Experience content={content} dict={dict} />
