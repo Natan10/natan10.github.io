@@ -15,12 +15,6 @@ export type Dictionary = {
     macroRegisters: string;
   };
   language: { navLabel: string };
-  boot: {
-    regionLabel: string;
-    sessionBoot: string;
-    system: string;
-    help: { before: string; after: string };
-  };
   prompt: { label: string; exec: string; clear: string };
   output: { label: string };
   statusline: { diagnostics: string };

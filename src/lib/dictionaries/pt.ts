@@ -17,17 +17,6 @@ export const pt: Dictionary = {
     macroRegisters: "Registradores de macro:",
   },
   language: { navLabel: "Idioma" },
-  boot: {
-    regionLabel: "Registro de inicialização da sessão",
-    sessionBoot: "[INICIALIZAÇÃO DA SESSÃO: 0.0014s]",
-    system:
-      "[SYSTEM]: Kernel v6.8.9-x86_64 carregado. Sessão com privilégio de convidado estabelecida.",
-    help: {
-      before: "Digite ",
-      after:
-        " ou pressione qualquer chip de macro acima para exibir o buffer do sistema. Todos os comandos são não destrutivos no modo de sessão de convidado.",
-    },
-  },
   prompt: { label: "Comando", exec: "EXEC", clear: "LIMPAR" },
   output: { label: "Saída dos comandos" },
   statusline: { diagnostics: "✓ 0 erros 0 avisos" },
@@ -115,7 +104,7 @@ export const pt: Dictionary = {
     },
     "/help": { description: "Listar todos os comandos disponíveis", chip: "manual" },
     "/clear": {
-      description: "Reiniciar a saída para o cartão de inicialização",
+      description: "Limpar a saída dos comandos",
       chip: "limpar",
     },
     "/music": {

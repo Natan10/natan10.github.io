@@ -93,9 +93,7 @@ test.describe("command prompt", () => {
     await expect(output(page)).not.toBeEmpty();
     await exec(page, "/clear");
     await expect(output(page)).toBeEmpty();
-    await expect(
-      page.getByRole("region", { name: "Session boot log" }),
-    ).toBeVisible();
+    await expect(output(page)).toBeAttached();
 
     await exec(page, "/user");
     await exec(page, ":c");

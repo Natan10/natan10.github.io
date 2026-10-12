@@ -20,7 +20,7 @@ Personal content is split so the two languages cannot drift apart:
 
 - [`src/content/shared.ts`](src/content/shared.ts) holds what does not change with the language: names, job titles, stacks, skill levels, links and contact details. Edit these once.
 - [`src/content/en.ts`](src/content/en.ts) and [`src/content/pt.ts`](src/content/pt.ts) hold the translatable text (bio, location, periods, achievements, project descriptions, takeaways, skill group names), keyed by the ids in `shared.ts`. A missing or extra key is a type error, so `npm run build` fails.
-- Interface text (labels, the boot card, `/help` descriptions, error messages) lives in [`src/lib/dictionaries/en.ts`](src/lib/dictionaries/en.ts) and [`src/lib/dictionaries/pt.ts`](src/lib/dictionaries/pt.ts). Command names stay in English; their descriptions are in the dictionaries.
+- Interface text (labels, `/help` descriptions, error messages) lives in [`src/lib/dictionaries/en.ts`](src/lib/dictionaries/en.ts) and [`src/lib/dictionaries/pt.ts`](src/lib/dictionaries/pt.ts). Command names stay in English; their descriptions are in the dictionaries.
 - Site-wide values (banner word, version) are in [`src/content/site.ts`](src/content/site.ts).
 
 Visitors switch with the `EN | PT` toggle in the top-right corner of the hero or the `/language` command (`/language pt`, `/language en`; `:language` works too). Switching is a plain navigation to the other route, which opens at its top.

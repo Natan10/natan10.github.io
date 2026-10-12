@@ -359,8 +359,7 @@ test.describe("interface text", () => {
       expect(shown, key).not.toMatch(new RegExp(`(^|[^\\p{L}\\d])${word}($|[^\\p{L}\\d])`, "u"));
     }
     await expect(page.getByText("Execute comandos começando com / ou :, ou acione buffers rápidos")).toBeVisible();
-    // Labelled regions carry Portuguese names.
-    await expect(page.getByRole("region", { name: "Registro de inicialização da sessão" })).toBeVisible();
+    // Interactive controls and output carry Portuguese names.
     await expect(page.getByRole("log", { name: "Saída dos comandos" })).toBeAttached();
     await expect(page.getByRole("textbox", { name: "Comando" })).toBeVisible();
     expect(await page.locator('ul[aria-label="Tecnologias"]').count()).toBeGreaterThan(0);
@@ -373,11 +372,8 @@ test.describe("interface text", () => {
       "VIM 9.1",
       "BUF #1",
       "[RO]",
-      "guest@portfolio:~$",
-      "NODE: node-01a.sfo3",
       "BAUD: 38400 | ARCH: x86_64-retro | TERM: xterm-256color",
       "EXEC",
-      "[SYSTEM]:",
       "[OK]",
       "profile.vim",
       "⎇ main",
@@ -387,8 +383,8 @@ test.describe("interface text", () => {
     // Decorative phrases are translated.
     await expect(page.getByText("TERMINAL DE HARDWARE COMPATÍVEL COM VT220")).toBeVisible();
     expect(tokens).toContain("0 erros 0 avisos");
-    expect(tokens).toContain("[INICIALIZAÇÃO DA SESSÃO: 0.0014s]");
-    expect(tokens).not.toContain("SESSION BOOT");
+    await exec(page, "/help");
+    await expect(output(page)).toContainText("guest@portfolio:~$ /help");
     // COMMAND shows while the prompt is focused; the cv label is a token too.
     await prompt(page).focus();
     await expect(page.getByTestId("mode")).toHaveText("COMMAND");
@@ -436,7 +432,7 @@ test.describe("interface text", () => {
       [":theme, /theme", "Listar ou trocar temas de cor (:theme [nome])"],
       ["/language, :language", "Listar ou trocar o idioma (/language [en|pt])"],
       ["/help", "Listar todos os comandos disponíveis"],
-      ["/clear, :c", "Reiniciar a saída para o cartão de inicialização"],
+      ["/clear, :c", "Limpar a saída dos comandos"],
       ["/music, :music", "abrir o player da playlist do Spotify"],
       [":w", "Baixar o CV"],
       [":q", "Tentar sair (boa sorte)"],
@@ -669,9 +665,7 @@ test.describe("language switch", () => {
     await expect(page).toHaveURL(/\/pt$/);
     await page.waitForLoadState("networkidle");
     expect(await outputLines(page)).toEqual([]);
-    await expect(
-      page.getByRole("region", { name: "Registro de inicialização da sessão" }),
-    ).toBeVisible();
+    await expect(page.getByRole("log", { name: "Saída dos comandos" })).toBeEmpty();
     await prompt(page).press("ArrowUp");
     await expect(prompt(page)).toHaveValue("");
   });

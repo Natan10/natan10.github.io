@@ -17,17 +17,6 @@ export const en: Dictionary = {
     macroRegisters: "Macro Registers:",
   },
   language: { navLabel: "Language" },
-  boot: {
-    regionLabel: "Session boot log",
-    sessionBoot: "[SESSION BOOT: 0.0014s]",
-    system:
-      "[SYSTEM]: Kernel v6.8.9-x86_64 loaded. Guest privilege session established.",
-    help: {
-      before: "Type ",
-      after:
-        " or press any macro chip above to render systems buffer. All commands are non-destructive in guest session mode.",
-    },
-  },
   prompt: { label: "Command", exec: "EXEC", clear: "CLEAR" },
   output: { label: "Command output" },
   statusline: { diagnostics: "✓ 0 errors 0 warnings" },
@@ -115,7 +104,7 @@ export const en: Dictionary = {
     },
     "/help": { description: "List every available command", chip: "manpage" },
     "/clear": {
-      description: "Reset the output to the boot card",
+      description: "Clear command output",
       chip: "reset",
     },
     "/music": {

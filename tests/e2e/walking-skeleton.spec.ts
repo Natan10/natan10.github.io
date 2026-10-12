@@ -1,16 +1,14 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("walking skeleton", () => {
-  test("shows the terminal shell, hero and boot card", async ({ page }) => {
+  test("shows the terminal shell, hero and command output", async ({ page }) => {
     await page.goto("/");
 
     await expect(page.getByText("Macro Registers:")).toBeVisible();
     await expect(
       page.getByRole("button", { name: /^\[\/(user|experience|skills|projects|theme|help|clear)\]/ }),
     ).toHaveCount(7);
-    await expect(
-      page.getByRole("region", { name: "Session boot log" }),
-    ).toBeVisible();
+    await expect(page.getByRole("log", { name: "Command output" })).toBeAttached();
     await expect(page.getByText("To get started")).toHaveCount(0);
   });
 
