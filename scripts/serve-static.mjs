@@ -42,7 +42,7 @@ createServer(async (request, response) => {
       if (!(await stat(candidate)).isFile()) continue;
       const body = await readFile(candidate);
       const ext = extname(candidate);
-      const type = candidate.includes("opengraph-image-") ? "image/png" : (types[ext] ?? "application/octet-stream");
+      const type = types[ext] ?? "application/octet-stream";
       response.writeHead(200, {
         "content-type": `${type}${[".html", ".css", ".js", ".json", ".txt"].includes(ext) ? "; charset=utf-8" : ""}`,
       });
